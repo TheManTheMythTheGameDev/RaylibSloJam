@@ -62,3 +62,7 @@ dkms.conf
 
 # Build folder
 [Bb]uild
+
+# VSCode build files
+*.json
+Makefile
