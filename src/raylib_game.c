@@ -84,7 +84,7 @@ int main(void)
 #if defined(PLATFORM_WEB)
     emscripten_set_main_loop(UpdateDrawFrame, 60, 1);
 #else
-    SetTargetFPS(60);     // Set our game frames-per-second
+    SetTargetFPS(6);     // Set our game frames-per-second
     //--------------------------------------------------------------------------------------
 
     // Main game loop
