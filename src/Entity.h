@@ -5,7 +5,9 @@
 class Entity
 {
 public:
-    Entity();
+    Entity()
+    {
+    }
     ~Entity()
     {
         for (component* comp : components)
@@ -14,12 +16,16 @@ public:
         }
     }
 
+    void Update();
+
+    // Add a component given its data type and arguments to pass to the constructor
     template<typename T, typename... Args>
     inline void AddComponent(Args... constructorArgs)
     {
         components.push_back((component*)(new T(constructorArgs)));
     }
 
+    // Add an already-made component
     inline void AddComponent(component* comp)
     {
         components.push_back(comp);
