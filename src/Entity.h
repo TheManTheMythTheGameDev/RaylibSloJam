@@ -1,5 +1,5 @@
 #pragma once
-#include "component.h"
+#include "Component.h"
 #include <vector>
 
 class Entity
@@ -10,7 +10,7 @@ public:
     }
     ~Entity()
     {
-        for (component* comp : components)
+        for (Component* comp : components)
         {
             delete comp;
         }
@@ -22,14 +22,14 @@ public:
     template<typename T, typename... Args>
     inline void AddComponent(Args... constructorArgs)
     {
-        components.push_back((component*)(new T(constructorArgs)));
+        components.push_back((Component*)(new T(constructorArgs)));
     }
 
     // Add an already-made component
-    inline void AddComponent(component* comp)
+    inline void AddComponent(Component* comp)
     {
         components.push_back(comp);
     }
 private:
-    std::vector<component*> components;
+    std::vector<Component*> components;
 };

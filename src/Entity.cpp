@@ -2,7 +2,7 @@
 
 void Entity::Update()
 {
-    for (component* comp : components)
+    for (Component* comp : components)
     {
         comp->update();
     }

@@ -1,8 +1,12 @@
 #pragma once
+#include "Entity.h"
 
-class scene
+class Scene
 {
 public:
-    scene();
+    Scene();
     void update();
+
+private:
+    std::vector<Entity> entities;
 };
