@@ -1,8 +1,8 @@
 #pragma once
 
-class scene
+class Scene
 {
 public:
-    scene();
+    Scene();
     void update();
 };

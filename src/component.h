@@ -1,9 +1,10 @@
 #pragma once
+#include "Entity.h"
 
-class component 
+class Component 
 {
 public:
-    component();
+    Component();
     virtual void update();
-    virtual ~component();
+    virtual ~Component();
 };
