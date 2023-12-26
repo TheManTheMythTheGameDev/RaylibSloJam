@@ -4,6 +4,6 @@ void Entity::Update()
 {
     for (Component* comp : components)
     {
-        comp->update();
+        comp->Update();
     }
 }

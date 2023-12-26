@@ -5,6 +5,6 @@ class Component
 {
 public:
     Component();
-    virtual void update();
+    virtual void Update();
     virtual ~Component();
 };

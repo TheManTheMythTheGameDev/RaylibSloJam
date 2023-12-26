@@ -358,7 +358,7 @@
     <ClCompile Include="..\..\..\src\raylib_game.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\src\component.h" />
+    <ClInclude Include="..\..\..\src\Component.h" />
     <ClInclude Include="..\..\..\src\Entity.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
