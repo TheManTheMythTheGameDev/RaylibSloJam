@@ -5,7 +5,7 @@ class Scene
 {
 public:
     Scene();
-    void update();
+    void Update();
 
 private:
     std::vector<Entity> entities;
