@@ -34,7 +34,7 @@ public:
     template<typename T, typename... Args>
     inline void AddComponent(Args... constructorArgs)
     {
-        Component* comp = (Component*)(new T(constructorArgs...))
+        Component* comp = (Component*)(new T(constructorArgs...));
         components[GetID<T>()] = comp;
         comp->OnAdd(*this);
     }

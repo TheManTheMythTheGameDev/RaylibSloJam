@@ -15,6 +15,7 @@ public:
     }
     void CalculateSteps(float dTime);
     void Step();
+    void ResolveCollision(PhysicsComponent* entity1, PhysicsComponent* entity2);
     void AddEntity(PhysicsComponent* newEntity);
     void RemoveEntity(PhysicsComponent* entity);
     void ClearEntities();
