@@ -23,6 +23,7 @@
 #include <string.h>                         // Required for: 
 
 #include "Scene.h"
+#include "GraphicsComponent.h"
 
 //----------------------------------------------------------------------------------
 // Defines and Macros
@@ -85,6 +86,8 @@ int main(void)
     target = LoadRenderTexture(screenWidth, screenHeight);
     SetTextureFilter(target.texture, TEXTURE_FILTER_BILINEAR);
 
+    sampleScene.AddEntity(Entity(Vector2{ 100.0f, 100.0f }, new GraphicsComponent()));
+
 #if defined(PLATFORM_WEB)
     emscripten_set_main_loop(UpdateDrawFrame, 60, 1);
 #else
@@ -138,7 +141,7 @@ void UpdateDrawFrame(void)
         ClearBackground(RAYWHITE);
         
         // Draw render texture to screen, scaled if required
-        DrawTexturePro(target.texture, (Rectangle){ 0, 0, (float)target.texture.width, -(float)target.texture.height }, (Rectangle){ 0, 0, (float)target.texture.width, (float)target.texture.height }, (Vector2){ 0, 0 }, 0.0f, WHITE);
+        DrawTexturePro(target.texture, Rectangle{ 0, 0, (float)target.texture.width, -(float)target.texture.height }, Rectangle{ 0, 0, (float)target.texture.width, (float)target.texture.height }, Vector2{ 0, 0 }, 0.0f, WHITE);
 
         // TODO: Draw everything that requires to be drawn at this point, maybe UI?
         sampleScene.Update();
