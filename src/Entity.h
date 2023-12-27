@@ -34,7 +34,9 @@ public:
     template<typename T, typename... Args>
     inline void AddComponent(Args... constructorArgs)
     {
-        components[GetID<T>()] = (Component*)(new T(constructorArgs...));
+        Component* comp = (Component*)(new T(constructorArgs...))
+        components[GetID<T>()] = comp;
+        comp->OnAdd(*this);
     }
 
     // Add an already-made component
@@ -43,7 +45,8 @@ public:
     {
         // std::cout<<static_cast<PhysicsComponent*>(comp)->velocity.x<<std::endl;
         int ID = GetID<T>();
-        components[ID] = comp;
+        components[ID] = static_cast<Component*>(comp);
+        comp->OnAdd(*this);
     }
 
     // Grab a component of a given type
