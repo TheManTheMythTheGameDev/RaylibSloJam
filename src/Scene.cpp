@@ -6,3 +6,7 @@ void Scene::Update()
         ent.Update();
     }
 }
+
+void Scene::AddEntity(Entity newEntity) {
+    entities.push_back(newEntity);
+}

@@ -22,6 +22,8 @@
 #include <stdlib.h>                         // Required for: 
 #include <string.h>                         // Required for: 
 
+#include "Scene.h"
+
 //----------------------------------------------------------------------------------
 // Defines and Macros
 //----------------------------------------------------------------------------------
@@ -55,6 +57,8 @@ static const int screenHeight = 720;
 static RenderTexture2D target = { 0 };  // Render texture to render our game
 
 // TODO: Define global variables here, recommended to make them static
+
+static Scene sampleScene = Scene();
 
 //----------------------------------------------------------------------------------
 // Module Functions Declaration
@@ -137,6 +141,7 @@ void UpdateDrawFrame(void)
         DrawTexturePro(target.texture, (Rectangle){ 0, 0, (float)target.texture.width, -(float)target.texture.height }, (Rectangle){ 0, 0, (float)target.texture.width, (float)target.texture.height }, (Vector2){ 0, 0 }, 0.0f, WHITE);
 
         // TODO: Draw everything that requires to be drawn at this point, maybe UI?
+        sampleScene.Update();
 
     EndDrawing();
     //----------------------------------------------------------------------------------  
