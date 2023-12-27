@@ -15,6 +15,8 @@ inline int GetID()
 class Entity
 {
 public:
+    Vector2 position;
+    
     Entity(Vector2 _pos = Vector2{ 0.0f, 0.0f })
     {
         pos = _pos;
