@@ -8,8 +8,9 @@ Scene::~Scene()
     }
 }
 
-void Scene::Update() 
+void Scene::Update()
 {
+    physicsHandler.CalculateSteps(GetFrameTime());
     for (Entity& ent : entities) {
         ent.Update();
     }
