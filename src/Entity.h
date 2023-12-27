@@ -1,12 +1,14 @@
 #pragma once
 #include "Component.h"
 #include <vector>
+#include "raylib.h"
 
 class Entity
 {
 public:
-    Entity()
+    Entity(Vector2 _pos = Vector2{ 0.0f, 0.0f })
     {
+        pos = _pos;
     }
     ~Entity()
     {
@@ -30,6 +32,8 @@ public:
     {
         components.push_back(comp);
     }
+
+    Vector2 pos;
 private:
     std::vector<Component*> components;
 };
