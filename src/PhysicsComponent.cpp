@@ -7,6 +7,11 @@ PhysicsComponent::PhysicsComponent(float mass_, Vector2 velocity_, Vector2 accel
     acceleration = acceleration_;
 }
 
+void PhysicsComponent::OnAdd(Entity& parentEntity)
+{
+    position = parentEntity.pos;
+}
+
 void PhysicsComponent::Update(Entity& parentEntity) {
     velocity = Vector2Add(velocity, acceleration);
     parentEntity.pos = Vector2Add(parentEntity.pos, velocity);

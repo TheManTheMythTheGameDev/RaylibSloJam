@@ -357,6 +357,7 @@
     <ClCompile Include="..\..\..\src\Entity.cpp" />
     <ClCompile Include="..\..\..\src\GraphicsComponent.cpp" />
     <ClCompile Include="..\..\..\src\PhysicsComponent.cpp" />
+    <ClCompile Include="..\..\..\src\PhysicsHandler.cpp" />
     <ClCompile Include="..\..\..\src\raylib_game.cpp" />
     <ClCompile Include="..\..\..\src\Scene.cpp" />
   </ItemGroup>
@@ -365,6 +366,7 @@
     <ClInclude Include="..\..\..\src\Entity.h" />
     <ClInclude Include="..\..\..\src\GraphicsComponent.h" />
     <ClInclude Include="..\..\..\src\PhysicsComponent.h" />
+    <ClInclude Include="..\..\..\src\PhysicsHandler.h" />
     <ClInclude Include="..\..\..\src\scene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

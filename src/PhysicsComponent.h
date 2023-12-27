@@ -12,6 +12,7 @@ public:
     Vector2 acceleration;
 
     PhysicsComponent(float mass_ = 1, Vector2 velocity_ = Vector2{ 0.0f, 0.0f }, Vector2 acceleration_ = Vector2{ 0.0f, 0.0f }, class PhysicsHandler& physicsHandler);
+    void OnAdd(Entity& parentEntity);
     void Update(Entity& parentEntity);
     ~PhysicsComponent()
     {
