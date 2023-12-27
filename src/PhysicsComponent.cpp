@@ -6,14 +6,11 @@ PhysicsComponent::PhysicsComponent(PhysicsHandler& physicsHandler, float mass_, 
     mass = mass_;
     velocity = velocity_;
     acceleration = acceleration_;
-}
-
-void PhysicsComponent::OnAdd(Entity& parentEntity)
-{
-    position = parentEntity.pos;
+    physicsHandler.AddEntity(this);
 }
 
 void PhysicsComponent::Update(Entity& parentEntity) {
+    // parentEntity.pos = position;
     velocity = Vector2Add(velocity, acceleration);
     parentEntity.pos = Vector2Add(parentEntity.pos, velocity);
     // std::cout<<"("<<velocity.x<<", "<<velocity.y<<")"<<std::endl;
