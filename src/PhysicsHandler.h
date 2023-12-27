@@ -5,8 +5,8 @@
 class PhysicsHandler
 {
 public:
-    static const float gConstant = 1.0;
-    static const float stepTime = 1.0 / 60.0;
+    static constexpr float gConstant = 1.0f;
+    static constexpr float stepTime = 1.0f / 60.0f;
     float currentTime;
 
     PhysicsHandler()

@@ -1,6 +1,7 @@
 #include "PhysicsComponent.h"
+#include "PhysicsHandler.h"
 
-PhysicsComponent::PhysicsComponent(float mass_, Vector2 velocity_, Vector2 acceleration_) 
+PhysicsComponent::PhysicsComponent(PhysicsHandler& physicsHandler, float mass_, Vector2 velocity_, Vector2 acceleration_) 
 {
     mass = mass_;
     velocity = velocity_;

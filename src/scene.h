@@ -5,7 +5,7 @@
 class Scene
 {
 public:
-    Scene(PhysicsHandler physicsHandler_)
+    Scene(PhysicsHandler physicsHandler_ = PhysicsHandler())
     {
         physicsHandler = physicsHandler_;
     }
@@ -13,7 +13,7 @@ public:
     void Update();
     void AddEntity(Entity newEntity);
 
+    PhysicsHandler physicsHandler;
 private:
-    PhysicsHanlder physicsHandler;
     std::vector<Entity> entities;
 };
