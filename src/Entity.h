@@ -31,11 +31,11 @@ public:
     void Update();
 
     // Add a component given its data type and arguments to pass to the constructor
-    /*template<typename T, typename... Args>
+    template<typename T, typename... Args>
     inline void AddComponent(Args... constructorArgs)
     {
         components[GetID<T>()] = (Component*)(new T(constructorArgs...));
-    }*/
+    }
 
     // Add an already-made component
     template<typename T>
@@ -46,9 +46,11 @@ public:
         components[ID] = comp;
     }
 
-    std::unordered_map<int, Component*> GetComponents() 
+    // Grab a component of a given type
+    template<typename T>
+    T* GetComponent()
     {
-        return components;
+        return dynamic_cast<T*>(components[GetID<T>()]);
     }
 
     Vector2 pos;
