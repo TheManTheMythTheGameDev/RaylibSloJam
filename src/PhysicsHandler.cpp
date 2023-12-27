@@ -23,7 +23,7 @@ void PhysicsHandler::Step() {
     }
 }
 
-void PhysicsHandler::ResolveCollision(PhysicsComponent* entity1, PhysicsComponent* entity2) 
+void PhysicsHandler::ResolveCollision(PhysicsComponent* entity1, PhysicsComponent* entity2)
 {
     Vector2 normalUnitVector = Vector2Normalize(Vector2Subtract(entity2->position, entity1->position));
     Vector2 entity1NormalVelocity = Vector2Scale(normalUnitVector, Vector2DotProduct(entity1->velocity, normalUnitVector));
