@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Entity.h"
+#include "raymath.h"
 
 class PhysicsComponent : public Entity
 {
@@ -23,6 +24,6 @@ public:
     {
         PhysicsComponent(1, Vector2{0, 0});
     }
-    void Update();
+    void Update(Entity& parent);
     ~PhysicsComponent();
 };
