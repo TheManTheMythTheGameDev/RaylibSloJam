@@ -1,7 +1,16 @@
 #pragma once
 #include "Component.h"
-#include <vector>
+#include <unordered_map>
 #include "raylib.h"
+
+extern int componentCounter;
+
+template<class T>
+inline int GetID()
+{
+    static int componentID = componentCounter++;
+    return componentID;
+}
 
 class Entity
 {
@@ -12,35 +21,32 @@ public:
     {
         pos = _pos;
     }
-    Entity(Vector2 _pos, std::vector<Component*> _components)
+    template<typename... Ts>
+    Entity(Vector2 _pos, Ts*... _components)
     {
         pos = _pos;
-        components = _components;
+        AddComponent<Ts...>(_components...);
     }
-    ~Entity()
-    {
-        for (Component* comp : components)
-        {
-            delete comp;
-        }
-    }
+    void Unload();
 
     void Update();
 
     // Add a component given its data type and arguments to pass to the constructor
-    template<typename T, typename... Args>
+    /*template<typename T, typename... Args>
     inline void AddComponent(Args... constructorArgs)
     {
-        components.push_back((Component*)(new T(constructorArgs...)));
-    }
+        components[GetID<T>()] = (Component*)(new T(constructorArgs...));
+    }*/
 
     // Add an already-made component
-    inline void AddComponent(Component* comp)
+    template<typename T>
+    inline void AddComponent(T* comp)
     {
-        components.push_back(comp);
+        int ID = GetID<T>();
+        components[ID] = comp;
     }
 
     Vector2 pos;
 private:
-    std::vector<Component*> components;
+    std::unordered_map<int, Component*> components;
 };

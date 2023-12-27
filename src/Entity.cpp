@@ -1,9 +1,19 @@
 #include "Entity.h"
 
+int componentCounter;
+
+void Entity::Unload()
+{
+    for (auto& comp : components)
+    {
+        delete comp.second;
+    }
+}
+
 void Entity::Update()
 {
-    for (Component* comp : components)
+    for (auto& comp : components)
     {
-        comp->Update(pos);
+        comp.second->Update(*this);
     }
 }

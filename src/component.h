@@ -4,7 +4,11 @@
 class Component 
 {
 public:
-    Component();
-    virtual void Update(Vector2 entityPos);
-    virtual ~Component();
+    Component()
+    {
+    }
+    virtual void Update(class Entity& parentEntity) = 0;
+    virtual ~Component()
+    {
+    }
 };
