@@ -9,6 +9,10 @@ PhysicsComponent::PhysicsComponent(PhysicsHandler& physicsHandler, float mass_, 
     physicsHandler.AddEntity(this);
 }
 
+PhysicsComponent::~PhysicsComponent()
+{
+}
+
 void PhysicsComponent::OnAdd(Entity& parentEntity)
 {
     position = parentEntity.pos;
