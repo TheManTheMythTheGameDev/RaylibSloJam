@@ -1,12 +1,10 @@
 #include "PhysicsComponent.h"
-#include <iostream>
 
 PhysicsComponent::PhysicsComponent(float mass_, Vector2 velocity_, Vector2 acceleration_) 
 {
     mass = mass_;
     velocity = velocity_;
     acceleration = acceleration_;
-    std::cout<<velocity.x<<std::endl;
 }
 
 void PhysicsComponent::Update(Entity& parentEntity) {
