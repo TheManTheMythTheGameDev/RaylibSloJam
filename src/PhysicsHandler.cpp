@@ -18,6 +18,11 @@ void PhysicsHandler::AddEntity(PhysicsComponent* newEntity) {
     physicsEntities.push_back(newEntity);
 }
 
+void PhysicsHandler::RemoveEntity(PhysicsComponent* entity)
+{
+    physicsEntities.erase(std::remove(physicsEntities.begin(), physicsEntities.end(), entity));
+}
+
 void PhysicsHandler::ClearEntities() {
     int numEntities = physicsEntities.size();
     for (int i = 0; i < numEntities; i++) {

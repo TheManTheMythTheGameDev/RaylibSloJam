@@ -6,6 +6,12 @@ PhysicsComponent::PhysicsComponent(PhysicsHandler& physicsHandler, float mass_, 
     mass = mass_;
     velocity = velocity_;
     acceleration = acceleration_;
+    physicsHandler.AddEntity(this);
+}
+
+PhysicsComponent::~PhysicsComponent()
+{
+
 }
 
 void PhysicsComponent::OnAdd(Entity& parentEntity)
