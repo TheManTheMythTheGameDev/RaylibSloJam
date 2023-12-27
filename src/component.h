@@ -1,10 +1,10 @@
 #pragma once
-#include "Entity.h"
+#include "raylib.h"
 
 class Component 
 {
 public:
     Component();
-    virtual void Update();
+    virtual void Update(Vector2 entityPos);
     virtual ~Component();
 };

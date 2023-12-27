@@ -2,7 +2,7 @@
 
 void Scene::Update() 
 {
-    for (Entity ent : entities) {
+    for (Entity& ent : entities) {
         ent.Update();
     }
 }
