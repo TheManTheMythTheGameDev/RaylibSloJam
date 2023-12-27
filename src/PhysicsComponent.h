@@ -15,6 +15,11 @@ public:
     ~PhysicsComponent();
     void OnAdd(Entity& parentEntity);
     void Update(Entity& parentEntity);
+
+    inline Shape GetShape()
+    {
+        return shape;
+    }
 private:
     Shape shape;
 };
