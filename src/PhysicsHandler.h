@@ -16,6 +16,7 @@ public:
     void CalculateSteps(float dTime);
     void Step();
     void AddEntity(PhysicsComponent* newEntity);
+    void RemoveEntity(PhysicsComponent* entity);
     void ClearEntities();
     ~PhysicsHandler()
     {

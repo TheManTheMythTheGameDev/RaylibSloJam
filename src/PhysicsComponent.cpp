@@ -9,6 +9,11 @@ PhysicsComponent::PhysicsComponent(PhysicsHandler& physicsHandler, float mass_, 
     physicsHandler.AddEntity(this);
 }
 
+void PhysicsComponent::OnAdd(Entity& parentEntity)
+{
+    position = parentEntity.pos;
+}
+
 void PhysicsComponent::Update(Entity& parentEntity) {
     // parentEntity.pos = position;
     velocity = Vector2Add(velocity, acceleration);

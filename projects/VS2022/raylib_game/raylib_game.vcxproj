@@ -367,7 +367,7 @@
     <ClInclude Include="..\..\..\src\GraphicsComponent.h" />
     <ClInclude Include="..\..\..\src\PhysicsComponent.h" />
     <ClInclude Include="..\..\..\src\PhysicsHandler.h" />
-    <ClInclude Include="..\..\..\src\scene.h" />
+    <ClInclude Include="..\..\..\src\Scene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
