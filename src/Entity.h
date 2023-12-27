@@ -22,7 +22,7 @@ public:
     template<typename T, typename... Args>
     inline void AddComponent(Args... constructorArgs)
     {
-        components.push_back((Component*)(new T(constructorArgs)));
+        components.push_back((Component*)(new T(constructorArgs...)));
     }
 
     // Add an already-made component
