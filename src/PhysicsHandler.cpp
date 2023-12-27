@@ -19,8 +19,5 @@ void PhysicsHandler::AddEntity(PhysicsComponent* newEntity) {
 }
 
 void PhysicsHandler::ClearEntities() {
-    int numEntities = physicsEntities.size();
-    for (int i = 0; i < numEntities; i++) {
-        physicsEntities.pop_back();
-    }
+    physicsEntities.clear();
 }
