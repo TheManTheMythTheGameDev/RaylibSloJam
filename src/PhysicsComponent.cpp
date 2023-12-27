@@ -1,4 +1,5 @@
 #include "PhysicsComponent.h"
+#include <iostream>
 
 PhysicsComponent::PhysicsComponent(float mass_, Vector2 velocity_, Vector2 acceleration_) 
 {
@@ -6,22 +7,6 @@ PhysicsComponent::PhysicsComponent(float mass_, Vector2 velocity_, Vector2 accel
     velocity = velocity_;
     acceleration = acceleration_;
     std::cout<<velocity.x<<std::endl;
-}
-
-PhysicsComponent::PhysicsComponent(float mass_, Vector2 velocity_) 
-{
-    std::cout<<velocity_.x<<std::endl;
-    PhysicsComponent(mass_, velocity_, Vector2{0, 0});
-}
-
-PhysicsComponent::PhysicsComponent(float mass_) 
-{
-    PhysicsComponent(mass_, Vector2{0, 0}, Vector2{0, 0});
-}
-
-PhysicsComponent::PhysicsComponent() 
-{
-    PhysicsComponent(1, Vector2{0, 0}, Vector2{0, 0});
 }
 
 void PhysicsComponent::Update(Entity& parentEntity) {

@@ -21,6 +21,7 @@
 #include <stdio.h>                          // Required for: printf()
 #include <stdlib.h>                         // Required for: 
 #include <string.h>                         // Required for: 
+#include <iostream>
 
 #include "Scene.h"
 #include "GraphicsComponent.h"

@@ -10,10 +10,7 @@ public:
     Vector2 velocity;
     Vector2 acceleration;
 
-    PhysicsComponent(float mass_, Vector2 velocity_, Vector2 acceleration_);
-    PhysicsComponent(float mass_, Vector2 velocity_);
-    PhysicsComponent(float mass_);
-    PhysicsComponent();
+    PhysicsComponent(float mass_ = 1, Vector2 velocity_ = Vector2{ 0.0f, 0.0f }, Vector2 acceleration_ = Vector2{ 0.0f, 0.0f });
     void Update(Entity& parentEntity);
     ~PhysicsComponent()
     {
