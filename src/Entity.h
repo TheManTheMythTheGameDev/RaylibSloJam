@@ -1,5 +1,6 @@
 #pragma once
 #include "Component.h"
+#include "PhysicsComponent.h"
 #include <unordered_map>
 #include "raylib.h"
 
@@ -40,8 +41,14 @@ public:
     template<typename T>
     inline void AddComponent(T* comp)
     {
+        // std::cout<<static_cast<PhysicsComponent*>(comp)->velocity.x<<std::endl;
         int ID = GetID<T>();
         components[ID] = comp;
+    }
+
+    std::unordered_map<int, Component*> GetComponents() 
+    {
+        return components;
     }
 
     Vector2 pos;

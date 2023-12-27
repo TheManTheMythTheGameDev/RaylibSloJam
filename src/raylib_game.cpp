@@ -24,6 +24,7 @@
 
 #include "Scene.h"
 #include "GraphicsComponent.h"
+#include "PhysicsComponent.h"
 
 //----------------------------------------------------------------------------------
 // Defines and Macros
@@ -86,7 +87,13 @@ int main(void)
     target = LoadRenderTexture(screenWidth, screenHeight);
     SetTextureFilter(target.texture, TEXTURE_FILTER_BILINEAR);
 
-    sampleScene.AddEntity(Entity(Vector2{ 100.0f, 100.0f }, new GraphicsComponent()));
+    // Entity exampleEntity = Entity(Vector2{ 100.0f, 100.0f }, new PhysicsComponent(1, Vector2{ 10, 10 }));
+    // exampleEntity.AddComponent(new PhysicsComponent(1, Vector2{ 10, 10 }));
+    PhysicsComponent* myPhysicsComponent = new PhysicsComponent(1, Vector2{ 10, 10 });
+    std::cout<<myPhysicsComponent->velocity.x<<std::endl;
+    std::cout<<myPhysicsComponent->mass<<std::endl;
+    // std::cout<<static_cast<PhysicsComponent*>(exampleEntity.GetComponents().at(0))->velocity.x<<std::endl;
+    // sampleScene.AddEntity(exampleEntity);
 
 #if defined(PLATFORM_WEB)
     emscripten_set_main_loop(UpdateDrawFrame, 60, 1);
