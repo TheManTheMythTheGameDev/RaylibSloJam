@@ -10,6 +10,11 @@ public:
     {
         pos = _pos;
     }
+    Entity(Vector2 _pos, std::vector<Component*> _components)
+    {
+        pos = _pos;
+        components = _components;
+    }
     ~Entity()
     {
         for (Component* comp : components)
