@@ -9,7 +9,7 @@ PhysicsComponent::PhysicsComponent(PhysicsHandler& physicsHandler, float mass_, 
     physicsHandler.AddEntity(this);
 }
 
-PhysicsComponent::~PhysicsComponent()
+PhysicsComponent::~PhysicsComponent() 
 {
 }
 
@@ -19,9 +19,9 @@ void PhysicsComponent::OnAdd(Entity& parentEntity)
 }
 
 void PhysicsComponent::Update(Entity& parentEntity) {
-    // parentEntity.pos = position;
-    velocity = Vector2Add(velocity, acceleration);
-    parentEntity.pos = Vector2Add(parentEntity.pos, velocity);
+    parentEntity.pos = position;
+    // velocity = Vector2Add(velocity, acceleration);
+    // parentEntity.pos = Vector2Add(parentEntity.pos, velocity);
     // std::cout<<"("<<velocity.x<<", "<<velocity.y<<")"<<std::endl;
     // std::cout<<"("<<parentEntity.pos.x<<", "<<parentEntity.pos.y<<")"<<std::endl;
 }

@@ -90,7 +90,7 @@ int main(void)
     SetTextureFilter(target.texture, TEXTURE_FILTER_BILINEAR);
 
     Entity exampleEntity = Entity(Vector2{ 100.0f, 100.0f }, new GraphicsComponent());
-    exampleEntity.AddComponent(new PhysicsComponent(sampleScene.physicsHandler, 1, Vector2{ 25, 25 }));
+    exampleEntity.AddComponent(new PhysicsComponent(sampleScene.physicsHandler, 1, Vector2{ 100, 100 }));
     // PhysicsComponent* myPhysicsComponent = new PhysicsComponent(1, Vector2{ 10, 10 });
     // std::cout<<myPhysicsComponent->velocity.x<<std::endl;
     // std::cout<<myPhysicsComponent->mass<<std::endl;

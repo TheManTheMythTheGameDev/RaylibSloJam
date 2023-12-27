@@ -10,8 +10,8 @@ void PhysicsHandler::CalculateSteps(float dTime) {
 
 void PhysicsHandler::Step() {
     for (PhysicsComponent* physicsEnt : physicsEntities) {
-        // physicsEnt->velocity = Vector2Scale(Vector2Add(physicsEnt->velocity, physicsEnt->acceleration), stepTime);
-        // physicsEnt->position = Vector2Scale(Vector2Add(physicsEnt->position, physicsEnt->velocity), stepTime);
+        physicsEnt->velocity = Vector2Add(physicsEnt->velocity, Vector2Scale(physicsEnt->acceleration, stepTime));
+        physicsEnt->position = Vector2Add(physicsEnt->position, Vector2Scale(physicsEnt->velocity, stepTime));
     }
 }
 
