@@ -1,5 +1,5 @@
 #pragma once
-#include "component.h"
+#include "Component.h"
 #include "Entity.h"
 
 class ControllerComponent : public Component

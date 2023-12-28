@@ -1,4 +1,4 @@
-#pragma once
+// #pragma once
 #include "ControllerComponent.h"
 #include "PhysicsComponent.h"
 #include "raylib.h"
