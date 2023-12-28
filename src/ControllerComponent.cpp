@@ -36,4 +36,6 @@ void ControllerComponent::Update(Entity& parentEntity)
 
     if (Vector2Length(physicsComp->velocity) > 1000)
         physicsComp->velocity = Vector2Scale(Vector2Normalize(physicsComp->velocity), 1000);
+
+    DrawLine(parentEntity.pos.x, parentEntity.pos.y, parentEntity.pos.x + cosf(angle * DEG2RAD) * 100.0f, parentEntity.pos.y + sinf(angle * DEG2RAD) * 100.0f, BLUE);
 }
