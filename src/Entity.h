@@ -2,6 +2,7 @@
 #include "Component.h"
 #include "PhysicsComponent.h"
 #include <unordered_map>
+#include <bitset>
 #include "raylib.h"
 
 extern int componentCounter;
@@ -16,14 +17,17 @@ inline int GetID()
 class Entity
 {
 public:
-    Entity(Vector2 _pos = Vector2{ 0.0f, 0.0f })
+    std::bitset<8> tag;
+    Entity(Vector2 _pos = Vector2{ 0.0f, 0.0f }, int tagIndex = 0)
     {
         pos = _pos;
+        tag.set(tagIndex);
     }
     template<typename... Ts>
-    Entity(Vector2 _pos, Ts*... _components)
+    Entity(Vector2 _pos, int tagIndex = 0, Ts*... _components)
     {
         pos = _pos;
+        tag.set(tagIndex);
         int ints[] = { AddComponentInternal(_components)... };
     }
     void Unload();

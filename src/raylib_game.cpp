@@ -90,8 +90,8 @@ int main(void)
     target = LoadRenderTexture(screenWidth, screenHeight);
     SetTextureFilter(target.texture, TEXTURE_FILTER_BILINEAR);
 
-    Entity exampleEntity = Entity(Vector2{ 100.0f, 100.0f }, new GraphicsComponent(), new PhysicsComponent(sampleScene.physicsHandler, Shape(), 1, Vector2{ 0.0f, 0.0f }), new ControllerComponent());
-    Entity exampleEntity2 = Entity(Vector2{ 900.0f, 100.0f }, new GraphicsComponent(), new PhysicsComponent(sampleScene.physicsHandler, Shape(), 1, Vector2{ -150.0f, 250.0f }));
+    Entity exampleEntity = Entity(Vector2{ 100.0f, 100.0f }, 0, new GraphicsComponent(), new PhysicsComponent(sampleScene.physicsHandler, Shape(), 1, Vector2{ 0.0f, 0.0f }), new ControllerComponent());
+    Entity exampleEntity2 = Entity(Vector2{ 900.0f, 100.0f }, 0, new GraphicsComponent(), new PhysicsComponent(sampleScene.physicsHandler, Shape(), 1, Vector2{ -150.0f, 250.0f }));
     // exampleEntity.AddComponent(new PhysicsComponent(sampleScene.physicsHandler, Shape(), 1, Vector2{ 100, 100 }));
     // PhysicsComponent* myPhysicsComponent = new PhysicsComponent(1, Vector2{ 10, 10 });
     // std::cout<<myPhysicsComponent->velocity.x<<std::endl;
