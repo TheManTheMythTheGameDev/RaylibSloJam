@@ -28,6 +28,22 @@ void PhysicsHandler::Step() {
     {
         physicsEnt->velocity = Vector2Add(physicsEnt->velocity, Vector2Scale(physicsEnt->acceleration, stepTime));
         physicsEnt->position = Vector2Add(physicsEnt->position, Vector2Scale(physicsEnt->velocity, stepTime));
+        if (physicsEnt->position.x < -borderLength) 
+        {
+            physicsEnt->position.x += GetScreenWidth() + 2 * borderLength;
+        }
+        if (physicsEnt->position.x > GetScreenWidth() + borderLength) 
+        {
+            physicsEnt->position.x -= GetScreenWidth() + 2 * borderLength;
+        }
+        if (physicsEnt->position.y < -borderLength) 
+        {
+            physicsEnt->position.y += GetScreenHeight() + 2 * borderLength;
+        }
+        if (physicsEnt->position.y > GetScreenHeight() + borderLength) 
+        {
+            physicsEnt->position.y -= GetScreenHeight() + 2 * borderLength;
+        }
     }
 }
 

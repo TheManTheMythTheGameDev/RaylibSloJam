@@ -7,6 +7,7 @@ class PhysicsHandler
 public:
     static constexpr float gConstant = 1.0f;
     static constexpr float stepTime = 1.0f / 60.0f;
+    static constexpr float borderLength = 100;
     float currentTime;
 
     PhysicsHandler()
