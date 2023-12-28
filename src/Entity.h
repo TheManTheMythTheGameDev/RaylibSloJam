@@ -24,7 +24,7 @@ public:
     Entity(Vector2 _pos, Ts*... _components)
     {
         pos = _pos;
-        AddComponent<Ts...>(_components...);
+        int ints[] = { AddComponentInternal(_components)... };
     }
     void Unload();
 
@@ -59,4 +59,14 @@ public:
     Vector2 pos;
 private:
     std::unordered_map<int, Component*> components;
+
+    // Add an already-made component
+    template<typename T>
+    inline int AddComponentInternal(T* comp)
+    {
+        int ID = GetID<T>();
+        components[ID] = static_cast<Component*>(comp);
+        comp->OnAdd(*this);
+        return ID;
+    }
 };
