@@ -17,7 +17,10 @@ void PhysicsHandler::Step() {
             PhysicsComponent* entity2 = physicsEntities[e2];
             if (entity1->GetShape().shapeType == Shape::ShapeType::Circle && entity2->GetShape().shapeType == Shape::ShapeType::Circle) 
             {
-                ResolveCollision(entity1, entity2);
+                if (entity1->GetShape().shapeData.circleRadius + entity2->GetShape().shapeData.circleRadius > Vector2Distance(entity1->position, entity2->position))
+                {
+                    ResolveCollision(entity1, entity2);
+                }
             }
         }
     }
@@ -41,9 +44,9 @@ void PhysicsHandler::ResolveCollision(PhysicsComponent* entity1, PhysicsComponen
     Vector2 entity2CollisionVelocity = Vector2Scale(Vector2Add(Vector2Scale(entity2NormalVelocity, entity2->mass - entity1->mass), Vector2Scale(entity1NormalVelocity, 2 * entity1->mass)), 1 / (combinedMass));
     entity1->velocity = Vector2Add(entity1CollisionVelocity, entity1TangentVelocity);
     entity2->velocity = Vector2Add(entity2CollisionVelocity, entity2TangentVelocity);
-    //float overlapDist = (entity1->GetShape().shapeData.circleRadius + entity2->GetShape().shapeData.circleRadius - Vector2Distance(entity1->position, entity2->position)) / 2.0;
-    //entity1->position = Vector2Subtract(entity1->position, Vector2Scale(normalUnitVector, overlapDist));
-    //entity2->position = Vector2Subtract(entity2->position, Vector2Scale(negativeNormalVector, overlapDist));
+    float overlapDist = (entity1->GetShape().shapeData.circleRadius + entity2->GetShape().shapeData.circleRadius - Vector2Distance(entity1->position, entity2->position)) / 2.0;
+    entity1->position = Vector2Subtract(entity1->position, Vector2Scale(normalUnitVector, overlapDist));
+    entity2->position = Vector2Subtract(entity2->position, Vector2Scale(negativeNormalVector, overlapDist));
 }
 
 void PhysicsHandler::AddEntity(PhysicsComponent* newEntity) {
