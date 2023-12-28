@@ -354,6 +354,7 @@
     <ResourceCompile Include="..\..\..\src\raylib_game.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\src\ControllerComponent.cpp" />
     <ClCompile Include="..\..\..\src\Entity.cpp" />
     <ClCompile Include="..\..\..\src\GraphicsComponent.cpp" />
     <ClCompile Include="..\..\..\src\PhysicsComponent.cpp" />
@@ -363,6 +364,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\Component.h" />
+    <ClInclude Include="..\..\..\src\ControllerComponent.h" />
     <ClInclude Include="..\..\..\src\Entity.h" />
     <ClInclude Include="..\..\..\src\GraphicsComponent.h" />
     <ClInclude Include="..\..\..\src\PhysicsComponent.h" />
