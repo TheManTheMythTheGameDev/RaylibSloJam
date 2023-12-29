@@ -5,8 +5,11 @@
 class ControllerComponent : public Component
 {
 public:
+    bool isActive;
+
     ControllerComponent()
     {
+        isActive = true;
         angle = 0.0f;
     }
     ~ControllerComponent()
