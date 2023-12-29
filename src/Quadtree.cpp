@@ -12,7 +12,7 @@ void Quadtree::Split()
 
 void Quadtree::Insert(PhysicsComponent* newEntity)
 {
-    if (entities.size() < capacity)
+    if (!alreadySplit && entities.size() < capacity)
     {
         entities.push_back(newEntity);
     }
@@ -21,6 +21,11 @@ void Quadtree::Insert(PhysicsComponent* newEntity)
         if (!alreadySplit)
         {
             Split();
+            for (PhysicsComponent* entity : entities)
+            {
+                this->Insert(entity);
+            }
+            entities.clear();
         }
         else
         {
