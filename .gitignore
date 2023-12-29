@@ -69,3 +69,4 @@ Makefile
 
 # Weird raylibslojam file idk what it's for
 raylibslojam
+.DS_Store

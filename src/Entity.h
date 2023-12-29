@@ -28,7 +28,7 @@ public:
     {
         pos = _pos;
         tag.set(tagIndex);
-        int ints[] = { AddComponentInternal(_components)... };
+        // int ints[] = { AddComponentInternal(_components)... };
     }
     void Unload();
 
