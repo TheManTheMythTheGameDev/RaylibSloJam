@@ -7,7 +7,7 @@ class GraphicsComponent : public Component
 public:
     Texture2D texture;
 
-    GraphicsComponent(Texture2D texture_ = LoadTexture("src/vecteezy_white-circle-png_21115771_475.png"))
+    GraphicsComponent(Texture2D texture_)
     {
         texture = texture_;
     }

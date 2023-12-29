@@ -20,6 +20,10 @@ public:
         capacity = capacity_;
         position = position_;
         dimensions = dimensions_;
+        nwBranch = nullptr;
+        neBranch = nullptr;
+        swBranch = nullptr;
+        seBranch = nullptr;
     }
     void Split();
     void Insert(PhysicsComponent* newEntity);

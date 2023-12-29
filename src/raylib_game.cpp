@@ -64,6 +64,7 @@ static RenderTexture2D target = { 0 };  // Render texture to render our game
 // TODO: Define global variables here, recommended to make them static
 
 static Scene sampleScene = Scene();
+static Texture2D defaultTexture;
 
 //----------------------------------------------------------------------------------
 // Module Functions Declaration
@@ -90,10 +91,10 @@ int main(void)
     target = LoadRenderTexture(screenWidth, screenHeight);
     SetTextureFilter(target.texture, TEXTURE_FILTER_BILINEAR);
 
-    // Texture2D dotTexture = LoadTexture("src/vecteezy_white-circle-png_21115771_475.png");
+    defaultTexture = LoadTexture("src/vecteezy_white-circle-png_21115771_475.png");
 
-    Entity exampleEntity = Entity(Vector2{ 100.0f, 100.0f }, 0, new GraphicsComponent(), new PhysicsComponent(sampleScene.physicsHandler, Shape(), 1, Vector2{ 0.0f, 0.0f }), new ControllerComponent());
-    Entity exampleEntity2 = Entity(Vector2{ 900.0f, 100.0f }, 0, new GraphicsComponent(), new PhysicsComponent(sampleScene.physicsHandler, Shape(), 1, Vector2{ -150.0f, 250.0f }));
+    Entity exampleEntity = Entity(Vector2{ 100.0f, 100.0f }, 0, new GraphicsComponent(defaultTexture), new PhysicsComponent(sampleScene.physicsHandler, Shape(), 1, Vector2{ 0.0f, 0.0f }), new ControllerComponent());
+    Entity exampleEntity2 = Entity(Vector2{ 900.0f, 100.0f }, 0, new GraphicsComponent(defaultTexture), new PhysicsComponent(sampleScene.physicsHandler, Shape(), 1, Vector2{ -150.0f, 250.0f }));
     // exampleEntity.AddComponent(new PhysicsComponent(sampleScene.physicsHandler, Shape(), 1, Vector2{ 100, 100 }));
     // PhysicsComponent* myPhysicsComponent = new PhysicsComponent(1, Vector2{ 10, 10 });
     // std::cout<<myPhysicsComponent->velocity.x<<std::endl;
@@ -118,6 +119,7 @@ int main(void)
     // De-Initialization
     //--------------------------------------------------------------------------------------
     UnloadRenderTexture(target);
+    UnloadTexture(defaultTexture);
     
     // TODO: Unload all loaded resources at this point
 
