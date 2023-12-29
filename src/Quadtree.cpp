@@ -104,8 +104,9 @@ void Quadtree::Remove(PhysicsComponent* entity)
     IRemove(entity);
 }
 
-void Quadtree::Update(PhysicsComponent* changedEntity)
+void Quadtree::Update(PhysicsComponent* changedEntity, Vector2 oldPosition)
 {
+
 }
 
 size_t Quadtree::TallyEntities()
