@@ -95,9 +95,9 @@ int main(void)
     defaultTexture = LoadTexture("src/vecteezy_white-circle-png_21115771_475.png");
 
     ControllerComponent* playerController =  new ControllerComponent();
-    Entity examplePlayer = Entity(Vector2{ 100.0f, 100.0f }, 0, new GraphicsComponent(defaultTexture), new PhysicsComponent(sampleScene.physicsHandler, Shape(), true), playerController);
-    Entity exampleGolfBall = Entity(Vector2{ 900.0f, 100.0f }, 1, new GraphicsComponent(defaultTexture), new PhysicsComponent(sampleScene.physicsHandler, Shape(), true, 1, Vector2{ -50.0f, -50.0f }));
-    Entity exampleGoal = Entity(Vector2{ 1180.0f, 620.0f }, 0, new GraphicsComponent(defaultTexture), new PhysicsComponent(sampleScene.physicsHandler, Shape()), new GoalComponent(1, playerController, &sampleScene, defaultTexture));
+    Entity examplePlayer = Entity(Vector2{ 100.0f, 100.0f }, 0, new GraphicsComponent(defaultTexture, 42.0f), new PhysicsComponent(sampleScene.physicsHandler, Shape(Shape::ShapeType::Circle, Shape::ShapeData{ 30.0f }), true), playerController);
+    Entity exampleGolfBall = Entity(Vector2{ 900.0f, 100.0f }, 1, new GraphicsComponent(defaultTexture, 42.0f), new PhysicsComponent(sampleScene.physicsHandler, Shape(Shape::ShapeType::Circle, Shape::ShapeData{ 30.0f }), true, 1, Vector2{ -50.0f, -50.0f }));
+    Entity exampleGoal = Entity(Vector2{ 1180.0f, 620.0f }, 0, new GraphicsComponent(defaultTexture, 42.0f), new PhysicsComponent(sampleScene.physicsHandler, Shape(Shape::ShapeType::Circle, Shape::ShapeData{ 30.0f })), new GoalComponent(1, playerController, &sampleScene, defaultTexture));
     sampleScene.AddEntity(examplePlayer);
     sampleScene.AddEntity(exampleGolfBall);
     sampleScene.AddEntity(exampleGoal);
