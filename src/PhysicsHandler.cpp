@@ -1,10 +1,13 @@
 #include "PhysicsHandler.h"
 
 void PhysicsHandler::CalculateSteps(float dTime) {
-    currentTime += dTime;
-    while (currentTime > stepTime) {
-        Step();
-        currentTime -= stepTime;
+    if (physicsEntities.size() > 0)
+    {
+        currentTime += dTime;
+        while (currentTime > stepTime) {
+            Step();
+            currentTime -= stepTime;
+        }
     }
 }
 
@@ -76,4 +79,9 @@ void PhysicsHandler::RemoveEntity(PhysicsComponent* entity)
 
 void PhysicsHandler::ClearEntities() {
     physicsEntities.clear();
+}
+
+void PhysicsHandler::DebugDraw()
+{
+
 }

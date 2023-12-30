@@ -18,9 +18,8 @@ public:
         SW,
         SE
     };
-    Quadtree* parent;
 
-    Quadtree(int capacity_ = 1, Vector2 position_ = Vector2{0, 0}, Vector2 dimensions_ = Vector2{ (float)GetScreenWidth(), (float)GetScreenHeight() }, Quadtree* parent_ = nullptr, int level_ = 0)
+    Quadtree(int capacity_ = 1, Vector2 position_ = Vector2{0, 0}, Vector2 dimensions_ = Vector2{ (float)GetScreenWidth(), (float)GetScreenHeight() }, int level_ = 0)
     {
         alreadySplit = false;
         capacity = capacity_;
@@ -30,7 +29,6 @@ public:
         {
             branches[i] = nullptr;
         }
-        parent = parent_;
         level = level_;
     }
     ~Quadtree();
@@ -42,6 +40,9 @@ public:
     // We need the old position so we can know which quads it's stored in
     void Update(PhysicsComponent* changedEntity, Vector2 oldPosition);
 
+    // Draw some nice rectangles for debugging purposes
+    void DebugDraw();
+
     static constexpr int maxLevel = 5;
 private:
     size_t TallyEntities();
@@ -51,6 +52,6 @@ private:
     // I don't feel like querying for quads that might have to be updated -- screw it, just update 'em all
     // Should be very cheap (it doesn't do anything!) if it doesn't need to be updated, although ideally this function should be avoided...
     void UpdateAll();
-    // Find where an entity used to be
-    void FindOldSlot();
+    // Find where an entity should be
+    Quadtree* FindSlot(PhysicsComponent* entity, Vector2 position);
 };
