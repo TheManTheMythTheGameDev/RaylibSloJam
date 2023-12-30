@@ -93,11 +93,12 @@ int main(void)
     SetTextureFilter(target.texture, TEXTURE_FILTER_BILINEAR);
 
     defaultTexture = LoadTexture("src/vecteezy_white-circle-png_21115771_475.png");
+    static Texture2D endScreenTexture = LoadTexture("src/EndScreen.png");
 
     ControllerComponent* playerController =  new ControllerComponent();
     Entity examplePlayer = Entity(Vector2{ 100.0f, 100.0f }, 0, new GraphicsComponent(defaultTexture, 42.0f), new PhysicsComponent(sampleScene.physicsHandler, Shape(Shape::ShapeType::Circle, Shape::ShapeData{ 30.0f }), true), playerController);
     Entity exampleGolfBall = Entity(Vector2{ 900.0f, 100.0f }, 1, new GraphicsComponent(defaultTexture, 42.0f), new PhysicsComponent(sampleScene.physicsHandler, Shape(Shape::ShapeType::Circle, Shape::ShapeData{ 30.0f }), true, 1, Vector2{ -50.0f, -50.0f }));
-    Entity exampleGoal = Entity(Vector2{ 1180.0f, 620.0f }, 0, new GraphicsComponent(defaultTexture, 42.0f), new PhysicsComponent(sampleScene.physicsHandler, Shape(Shape::ShapeType::Circle, Shape::ShapeData{ 30.0f })), new GoalComponent(1, playerController, &sampleScene, defaultTexture));
+    Entity exampleGoal = Entity(Vector2{ 1180.0f, 620.0f }, 0, new GraphicsComponent(defaultTexture, 130.0f), new PhysicsComponent(sampleScene.physicsHandler, Shape(Shape::ShapeType::Circle, Shape::ShapeData{ 100.0f })), new GoalComponent(1, playerController, &sampleScene, endScreenTexture));
     sampleScene.AddEntity(examplePlayer);
     sampleScene.AddEntity(exampleGolfBall);
     sampleScene.AddEntity(exampleGoal);
@@ -119,6 +120,7 @@ int main(void)
     //--------------------------------------------------------------------------------------
     UnloadRenderTexture(target);
     UnloadTexture(defaultTexture);
+    UnloadTexture(endScreenTexture);
     
     // TODO: Unload all loaded resources at this point
 
