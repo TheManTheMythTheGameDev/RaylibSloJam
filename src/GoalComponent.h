@@ -14,7 +14,9 @@ public:
         endScreen = endScreen_;
     }
     void OnTriggerCollision(Entity* otherEntity);
-    ~GoalComponent();
+    ~GoalComponent()
+    {
+    }
 
 private:
     ControllerComponent* player;

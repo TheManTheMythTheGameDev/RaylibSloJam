@@ -17,8 +17,11 @@ PhysicsComponent::~PhysicsComponent()
 void PhysicsComponent::OnAdd(Entity& parentEntity)
 {
     position = parentEntity.pos;
+    holdingEntity = &parentEntity;
 }
 
 void PhysicsComponent::Update(Entity& parentEntity) {
     parentEntity.pos = position;
+    previousCollided = currentCollided;
+    currentCollided.clear();
 }
