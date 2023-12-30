@@ -22,9 +22,7 @@ void PhysicsComponent::OnAdd(Entity& parentEntity)
 }
 
 void PhysicsComponent::Update(Entity& parentEntity) {
-    if (mobile) {
-        parentEntity.pos = position;
-    }
+    parentEntity.pos = position;
     previousCollided = currentCollided;
     currentCollided.clear();
 }
