@@ -26,6 +26,7 @@
 #include "Scene.h"
 #include "GraphicsComponent.h"
 #include "PhysicsComponent.h"
+#include "GoalComponent.h"
 #include "PhysicsHandler.h"
 #include "ControllerComponent.h"
 
@@ -93,15 +94,13 @@ int main(void)
 
     defaultTexture = LoadTexture("src/vecteezy_white-circle-png_21115771_475.png");
 
-    Entity exampleEntity = Entity(Vector2{ 100.0f, 100.0f }, 0, new GraphicsComponent(defaultTexture));
-    //Entity exampleEntity2 = Entity(Vector2{ 900.0f, 100.0f }, 0, new GraphicsComponent(defaultTexture), new PhysicsComponent(sampleScene.physicsHandler, Shape(), 1, Vector2{ -150.0f, 250.0f }));
-    // exampleEntity.AddComponent(new PhysicsComponent(sampleScene.physicsHandler, Shape(), 1, Vector2{ 100, 100 }));
-    // PhysicsComponent* myPhysicsComponent = new PhysicsComponent(1, Vector2{ 10, 10 });
-    // std::cout<<myPhysicsComponent->velocity.x<<std::endl;
-    // std::cout<<myPhysicsComponent->mass<<std::endl;
-    // std::cout<<static_cast<PhysicsComponent*>(exampleEntity.GetComponents().at(0))->velocity.x<<std::endl;
-    sampleScene.AddEntity(exampleEntity);
-    //sampleScene.AddEntity(exampleEntity2);
+    ControllerComponent* playerController =  new ControllerComponent();
+    Entity examplePlayer = Entity(Vector2{ 100.0f, 100.0f }, 0, new GraphicsComponent(defaultTexture), new PhysicsComponent(sampleScene.physicsHandler, Shape(), true), playerController);
+    Entity exampleGolfBall = Entity(Vector2{ 900.0f, 100.0f }, 1, new GraphicsComponent(defaultTexture), new PhysicsComponent(sampleScene.physicsHandler, Shape(), true, 1, Vector2{ -50.0f, -50.0f }));
+    Entity exampleGoal = Entity(Vector2{ 1180.0f, 620.0f }, 0, new GraphicsComponent(defaultTexture), new PhysicsComponent(sampleScene.physicsHandler, Shape()), new GoalComponent(1, playerController, &sampleScene, defaultTexture));
+    sampleScene.AddEntity(examplePlayer);
+    sampleScene.AddEntity(exampleGolfBall);
+    sampleScene.AddEntity(exampleGoal);
 
 #if defined(PLATFORM_WEB)
     emscripten_set_main_loop(UpdateDrawFrame, 60, 1);

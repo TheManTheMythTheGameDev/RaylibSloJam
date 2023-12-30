@@ -22,7 +22,23 @@ void PhysicsHandler::Step() {
             {
                 if (entity1->GetShape().shapeData.circleRadius + entity2->GetShape().shapeData.circleRadius > Vector2Distance(entity1->position, entity2->position))
                 {
-                    ResolveCollision(entity1, entity2);
+                    if (!entity1->mobile || !entity2->mobile)
+                    {
+                        if (entity1->mobile)
+                        {
+                            Bounce(entity1, entity2);
+                        }
+                        else
+                        {
+                            Bounce(entity2, entity1);
+                        }
+                    }
+                    else 
+                    {
+                        ResolveCollision(entity1, entity2);
+                    }
+                    entity1->currentCollided.push_back(entity2->holdingEntity);
+                    entity2->currentCollided.push_back(entity1->holdingEntity);
                 }
             }
         }
@@ -48,6 +64,16 @@ void PhysicsHandler::Step() {
             physicsEnt->position.y -= GetScreenHeight() + 2 * borderLength;
         }
     }
+}
+
+void PhysicsHandler::Bounce(PhysicsComponent* mobileEntity, PhysicsComponent* staticEntity)
+{
+    Vector2 normalUnitVector = Vector2Normalize(Vector2Subtract(staticEntity->position, mobileEntity->position));
+    Vector2 normalVelocity = Vector2Scale(normalUnitVector, Vector2DotProduct(mobileEntity->velocity, normalUnitVector));
+    Vector2 tangentVelocity = Vector2Subtract(mobileEntity->velocity, normalVelocity);
+    mobileEntity->velocity = Vector2Add(Vector2Scale(normalVelocity, -1), tangentVelocity);
+    float overlapDist = (mobileEntity->GetShape().shapeData.circleRadius + staticEntity->GetShape().shapeData.circleRadius - Vector2Distance(mobileEntity->position, staticEntity->position));
+    mobileEntity->position = Vector2Subtract(mobileEntity->position, Vector2Scale(normalUnitVector, overlapDist));
 }
 
 void PhysicsHandler::ResolveCollision(PhysicsComponent* entity1, PhysicsComponent* entity2)
