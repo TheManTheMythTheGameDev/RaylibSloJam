@@ -24,6 +24,8 @@ public:
     {
     }
 
+    void DebugDraw();
+
 private:
     std::vector<PhysicsComponent*> physicsEntities;
 };

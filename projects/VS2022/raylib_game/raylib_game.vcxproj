@@ -356,6 +356,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\src\ControllerComponent.cpp" />
     <ClCompile Include="..\..\..\src\Entity.cpp" />
+    <ClCompile Include="..\..\..\src\GoalComponent.cpp" />
     <ClCompile Include="..\..\..\src\GraphicsComponent.cpp" />
     <ClCompile Include="..\..\..\src\PhysicsComponent.cpp" />
     <ClCompile Include="..\..\..\src\PhysicsHandler.cpp" />
@@ -364,9 +365,11 @@
     <ClCompile Include="..\..\..\src\Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\src\CollisionListenComponent.h" />
     <ClInclude Include="..\..\..\src\Component.h" />
     <ClInclude Include="..\..\..\src\ControllerComponent.h" />
     <ClInclude Include="..\..\..\src\Entity.h" />
+    <ClInclude Include="..\..\..\src\GoalComponent.h" />
     <ClInclude Include="..\..\..\src\GraphicsComponent.h" />
     <ClInclude Include="..\..\..\src\PhysicsComponent.h" />
     <ClInclude Include="..\..\..\src\PhysicsHandler.h" />
