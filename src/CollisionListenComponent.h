@@ -1,5 +1,6 @@
 #pragma once
 #include "Entity.h"
+#include "PhysicsComponent.h"
 
 class CollisionListenComponent : public Component
 {
@@ -8,17 +9,8 @@ public:
     {
         listeningTag = listeningTag_;
     }
-    void CheckCollision(std::vector<Entity*> collisions)
-    {
-        for (Entity* collision : collisions)
-        {
-            if (collision->tag.test(listeningTag))
-            {
-                OnTriggerCollision(collision);
-            }
-        }
-    }
-    virtual void OnTriggerCollision(Entity* otherEntity);
+    virtual void Update(Entity& parentEntity);
+    virtual void OnTriggerCollision(Entity* otherEntity) = 0;
     ~CollisionListenComponent()
     {
     }

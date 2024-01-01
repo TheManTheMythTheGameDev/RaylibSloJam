@@ -1,5 +1,4 @@
 #include "PhysicsHandler.h"
-#include <iostream>
 
 void PhysicsHandler::CalculateSteps(float dTime) {
     currentTime += dTime;
@@ -20,8 +19,11 @@ void PhysicsHandler::Step() {
     allEntities = spatialPartition.GetAllEntities();
     for (PhysicsComponent* physicsEnt : allEntities) 
     {
-        physicsEnt->velocity = Vector2Add(physicsEnt->velocity, Vector2Scale(physicsEnt->acceleration, stepTime));
-        physicsEnt->position = Vector2Add(physicsEnt->position, Vector2Scale(physicsEnt->velocity, stepTime));
+        if (physicsEnt->mobile)
+        {
+            physicsEnt->velocity = Vector2Add(physicsEnt->velocity, Vector2Scale(physicsEnt->acceleration, stepTime));
+            physicsEnt->position = Vector2Add(physicsEnt->position, Vector2Scale(physicsEnt->velocity, stepTime));
+        }
         if (physicsEnt->position.x < -borderLength) 
         {
             physicsEnt->position.x += GetScreenWidth() + 2 * borderLength;
@@ -43,6 +45,16 @@ void PhysicsHandler::Step() {
             spatialPartition.Update(physicsEnt);
         }
     }
+}
+
+void PhysicsHandler::Bounce(PhysicsComponent* mobileEntity, PhysicsComponent* staticEntity)
+{
+    Vector2 normalUnitVector = Vector2Normalize(Vector2Subtract(staticEntity->position, mobileEntity->position));
+    Vector2 normalVelocity = Vector2Scale(normalUnitVector, Vector2DotProduct(mobileEntity->velocity, normalUnitVector));
+    Vector2 tangentVelocity = Vector2Subtract(mobileEntity->velocity, normalVelocity);
+    mobileEntity->velocity = Vector2Add(Vector2Scale(normalVelocity, -1), tangentVelocity);
+    float overlapDist = (mobileEntity->GetShape().shapeData.circleRadius + staticEntity->GetShape().shapeData.circleRadius - Vector2Distance(mobileEntity->position, staticEntity->position));
+    mobileEntity->position = Vector2Subtract(mobileEntity->position, Vector2Scale(normalUnitVector, overlapDist));
 }
 
 void PhysicsHandler::ResolveCollision(PhysicsComponent* entity1, PhysicsComponent* entity2)

@@ -18,6 +18,8 @@ public:
     void CalculateSteps(float dTime);
     void Step();
     static void ResolveCollision(PhysicsComponent* entity1, PhysicsComponent* entity2);
+    void Bounce(PhysicsComponent* mobileEntity, PhysicsComponent* staticEntity);
+    void ResolveCollision(PhysicsComponent* entity1, PhysicsComponent* entity2);
     void AddEntity(PhysicsComponent* newEntity);
     void RemoveEntity(PhysicsComponent* entity);
     void ClearEntities();

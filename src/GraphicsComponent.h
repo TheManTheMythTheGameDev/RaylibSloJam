@@ -6,10 +6,12 @@ class GraphicsComponent : public Component
 {
 public:
     Texture2D texture;
+    float radius;
 
-    GraphicsComponent(Texture2D texture_)
+    GraphicsComponent(Texture2D texture_, float radius_ = 100.0f)
     {
         texture = texture_;
+        radius = radius_;
     }
     ~GraphicsComponent()
     {

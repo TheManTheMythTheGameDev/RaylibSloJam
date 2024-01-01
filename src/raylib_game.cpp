@@ -26,6 +26,7 @@
 #include "Scene.h"
 #include "GraphicsComponent.h"
 #include "PhysicsComponent.h"
+#include "GoalComponent.h"
 #include "PhysicsHandler.h"
 #include "ControllerComponent.h"
 
@@ -93,16 +94,15 @@ int main(void)
     SetTextureFilter(target.texture, TEXTURE_FILTER_BILINEAR);
 
     defaultTexture = LoadTexture("src/vecteezy_white-circle-png_21115771_475.png");
+    static Texture2D endScreenTexture = LoadTexture("src/EndScreen.png");
 
-    // Entity exampleEntity = Entity(Vector2{ 100.0f, 100.0f }, 0, new GraphicsComponent(defaultTexture), new PhysicsComponent(sampleScene.physicsHandler, Shape(), 1, Vector2{ 0.0f, 0.0f }), new ControllerComponent());
-    // Entity exampleEntity2 = Entity(Vector2{ 900.0f, 100.0f }, 0, new GraphicsComponent(defaultTexture), new PhysicsComponent(sampleScene.physicsHandler, Shape(), 1, Vector2{ -150.0f, 250.0f }));
-    // exampleEntity.AddComponent(new PhysicsComponent(sampleScene.physicsHandler, Shape(), 1, Vector2{ 100, 100 }));
-    // PhysicsComponent* myPhysicsComponent = new PhysicsComponent(1, Vector2{ 10, 10 });
-    // std::cout<<myPhysicsComponent->velocity.x<<std::endl;
-    // std::cout<<myPhysicsComponent->mass<<std::endl;
-    // std::cout<<static_cast<PhysicsComponent*>(exampleEntity.GetComponents().at(0))->velocity.x<<std::endl;
-    // sampleScene.AddEntity(exampleEntity);
-    // sampleScene.AddEntity(exampleEntity2);
+    ControllerComponent* playerController =  new ControllerComponent();
+    Entity examplePlayer = Entity(Vector2{ 100.0f, 100.0f }, 0, new GraphicsComponent(defaultTexture, 42.0f), new PhysicsComponent(sampleScene.physicsHandler, Shape(Shape::ShapeType::Circle, Shape::ShapeData{ 30.0f }), true), playerController);
+    Entity exampleGolfBall = Entity(Vector2{ 500.0f, 300.0f }, 1, new GraphicsComponent(defaultTexture, 42.0f), new PhysicsComponent(sampleScene.physicsHandler, Shape(Shape::ShapeType::Circle, Shape::ShapeData{ 30.0f }), true));
+    Entity exampleGoal = Entity(Vector2{ 1180.0f, 620.0f }, 0, new GraphicsComponent(defaultTexture, 130.0f), new PhysicsComponent(sampleScene.physicsHandler, Shape(Shape::ShapeType::Circle, Shape::ShapeData{ 100.0f })), new GoalComponent(1, playerController, &sampleScene, endScreenTexture));
+    sampleScene.AddEntity(examplePlayer);
+    sampleScene.AddEntity(exampleGolfBall);
+    sampleScene.AddEntity(exampleGoal);
 
 #if defined(PLATFORM_WEB)
     emscripten_set_main_loop(UpdateDrawFrame, 60, 1);
@@ -121,6 +121,7 @@ int main(void)
     //--------------------------------------------------------------------------------------
     UnloadRenderTexture(target);
     UnloadTexture(defaultTexture);
+    UnloadTexture(endScreenTexture);
     
     // TODO: Unload all loaded resources at this point
 
