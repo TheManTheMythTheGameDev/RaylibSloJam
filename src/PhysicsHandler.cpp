@@ -1,33 +1,24 @@
 #include "PhysicsHandler.h"
+#include <iostream>
 
 void PhysicsHandler::CalculateSteps(float dTime) {
-    if (physicsEntities.size() > 0)
-    {
-        currentTime += dTime;
-        while (currentTime > stepTime) {
-            Step();
-            currentTime -= stepTime;
-        }
+    currentTime += dTime;
+    while (currentTime > stepTime) {
+        Step();
+        currentTime -= stepTime;
     }
 }
 
 void PhysicsHandler::Step() {
-    for (int e1 = 0; e1 < physicsEntities.size() - 1; e1++)
+    std::vector<PhysicsComponent*> allEntities = spatialPartition.GetAllEntities();
+    for (PhysicsComponent* physicsEnt : allEntities)
     {
-        PhysicsComponent* entity1 = physicsEntities[e1];
-        for (int e2 = e1 + 1; e2 < physicsEntities.size(); e2++) 
-        {
-            PhysicsComponent* entity2 = physicsEntities[e2];
-            if (entity1->GetShape().shapeType == Shape::ShapeType::Circle && entity2->GetShape().shapeType == Shape::ShapeType::Circle) 
-            {
-                if (entity1->GetShape().shapeData.circleRadius + entity2->GetShape().shapeData.circleRadius > Vector2Distance(entity1->position, entity2->position))
-                {
-                    ResolveCollision(entity1, entity2);
-                }
-            }
-        }
+        physicsEnt->oldPosition = physicsEnt->position;
     }
-    for (PhysicsComponent* physicsEnt : physicsEntities) 
+    spatialPartition.PerformInteractions(PhysicsInteraction);
+    spatialPartition.CheckAndCollapseChildren();
+    allEntities = spatialPartition.GetAllEntities();
+    for (PhysicsComponent* physicsEnt : allEntities) 
     {
         physicsEnt->velocity = Vector2Add(physicsEnt->velocity, Vector2Scale(physicsEnt->acceleration, stepTime));
         physicsEnt->position = Vector2Add(physicsEnt->position, Vector2Scale(physicsEnt->velocity, stepTime));
@@ -46,6 +37,10 @@ void PhysicsHandler::Step() {
         if (physicsEnt->position.y > GetScreenHeight() + borderLength) 
         {
             physicsEnt->position.y -= GetScreenHeight() + 2 * borderLength;
+        }
+        if (physicsEnt->oldPosition.x != physicsEnt->position.x || physicsEnt->oldPosition.y != physicsEnt->position.y)
+        {
+            spatialPartition.Update(physicsEnt);
         }
     }
 }
@@ -69,19 +64,30 @@ void PhysicsHandler::ResolveCollision(PhysicsComponent* entity1, PhysicsComponen
 }
 
 void PhysicsHandler::AddEntity(PhysicsComponent* newEntity) {
-    physicsEntities.push_back(newEntity);
+    spatialPartition.Insert(newEntity);
 }
 
 void PhysicsHandler::RemoveEntity(PhysicsComponent* entity)
 {
-    physicsEntities.erase(std::remove(physicsEntities.begin(), physicsEntities.end(), entity));
+    spatialPartition.Remove(entity);
 }
 
 void PhysicsHandler::ClearEntities() {
-    physicsEntities.clear();
+    // TODO: implement
 }
 
 void PhysicsHandler::DebugDraw()
 {
+    spatialPartition.DebugDraw();
+}
 
+void PhysicsHandler::PhysicsInteraction(PhysicsComponent* entity1, PhysicsComponent* entity2)
+{
+    if (entity1->GetShape().shapeType == Shape::ShapeType::Circle && entity2->GetShape().shapeType == Shape::ShapeType::Circle)
+    {
+        if (entity1->GetShape().shapeData.circleRadius + entity2->GetShape().shapeData.circleRadius > Vector2Distance(entity1->position, entity2->position))
+        {
+            ResolveCollision(entity1, entity2);
+        }
+    }
 }

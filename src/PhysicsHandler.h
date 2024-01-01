@@ -1,6 +1,6 @@
 #pragma once
-
 #include "PhysicsComponent.h"
+#include "Quadtree.h"
 
 class PhysicsHandler
 {
@@ -13,10 +13,11 @@ public:
     PhysicsHandler()
     {
         currentTime = 0;
+        spatialPartition = Quadtree(1, Vector2{ -borderLength, -borderLength }, Vector2{ (float)GetScreenWidth() + borderLength * 2.0f, (float)GetScreenHeight() + borderLength * 2.0f});
     }
     void CalculateSteps(float dTime);
     void Step();
-    void ResolveCollision(PhysicsComponent* entity1, PhysicsComponent* entity2);
+    static void ResolveCollision(PhysicsComponent* entity1, PhysicsComponent* entity2);
     void AddEntity(PhysicsComponent* newEntity);
     void RemoveEntity(PhysicsComponent* entity);
     void ClearEntities();
@@ -27,5 +28,7 @@ public:
     void DebugDraw();
 
 private:
-    std::vector<PhysicsComponent*> physicsEntities;
+    Quadtree spatialPartition;
+
+    static void PhysicsInteraction(PhysicsComponent* entity1, PhysicsComponent* entity2);
 };

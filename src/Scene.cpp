@@ -14,6 +14,7 @@ void Scene::Update()
     for (Entity& ent : entities) {
         ent.Update();
     }
+    physicsHandler.DebugDraw();
 }
 
 void Scene::AddEntity(Entity newEntity) {

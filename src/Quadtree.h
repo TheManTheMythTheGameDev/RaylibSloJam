@@ -1,5 +1,6 @@
 #pragma once
-#include "Entity.h";
+#include "PhysicsComponent.h"
+#include <unordered_map>
 
 class Quadtree
 {
@@ -32,26 +33,33 @@ public:
         level = level_;
     }
     ~Quadtree();
-    void Split();
     void Insert(PhysicsComponent* newEntity);
     // Remove an entity -- one moment it's there, the next it's gone
     // Does the same as Insert, but you know... the opposite
     void Remove(PhysicsComponent* entity);
-    // We need the old position so we can know which quads it's stored in
-    void Update(PhysicsComponent* changedEntity, Vector2 oldPosition);
+    // Removes and re-inserts an entity
+    void Update(PhysicsComponent* changedEntity);
+    // Runs a function that performs an interaction between all nearby entites
+    void PerformInteractions(void (*functionPtr)(PhysicsComponent*, PhysicsComponent*));
 
     // Draw some nice rectangles for debugging purposes
     void DebugDraw();
 
-    static constexpr int maxLevel = 5;
-private:
     size_t TallyEntities();
     std::vector<PhysicsComponent*> GetAllEntities();
-    // Used by Remove()
-    void IRemove(PhysicsComponent* entity);
+
     // I don't feel like querying for quads that might have to be updated -- screw it, just update 'em all
     // Should be very cheap (it doesn't do anything!) if it doesn't need to be updated, although ideally this function should be avoided...
-    void UpdateAll();
-    // Find where an entity should be
-    Quadtree* FindSlot(PhysicsComponent* entity, Vector2 position);
+    void CheckAndCollapseChildren();
+
+    static constexpr int maxLevel = 5;
+private:
+    // Used by PerformInteractions
+    void PerformChildInteractions(void (*functionPtr)(PhysicsComponent*, PhysicsComponent*), PhysicsComponent* a);
+    
+    // for managing children
+    void Split();
+
+    // For easily (and quickly) finding the quad an entity is in
+    static std::unordered_map<PhysicsComponent*, Quadtree*, std::hash<PhysicsComponent*>> quadFinder;
 };

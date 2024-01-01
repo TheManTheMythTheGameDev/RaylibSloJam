@@ -2,11 +2,14 @@
 #include "raylib.h"
 #include <algorithm>
 
+std::unordered_map<PhysicsComponent*, Quadtree*, std::hash<PhysicsComponent*>> Quadtree::quadFinder;
+
 Quadtree::~Quadtree()
 {
     for (int i = 0; i < 4; i++)
     {
         delete branches[i];
+        branches[i] = nullptr;
     }
 }
 
@@ -18,11 +21,12 @@ void Quadtree::Split()
     branches[NE] = new Quadtree(capacity, Vector2{ position.x + newDimensions.x, position.y }, newDimensions, level + 1);
     branches[SW] = new Quadtree(capacity, Vector2{ position.x, position.y + newDimensions.y }, newDimensions, level + 1);
     branches[SE] = new Quadtree(capacity, Vector2Add(position, newDimensions), newDimensions, level + 1);
-    for (PhysicsComponent* entity : entities)
+    for (int i = entities.size() - 1; i >= 0; i--)
     {
-        this->Insert(entity);
+        PhysicsComponent* entity = entities.back();
+        entities.pop_back();
+        Insert(entity);
     }
-    entities.clear();
 }
 
 void Quadtree::Insert(PhysicsComponent* newEntity)
@@ -30,13 +34,15 @@ void Quadtree::Insert(PhysicsComponent* newEntity)
     if ((!alreadySplit && entities.size() < capacity) || level >= maxLevel)
     {
         entities.push_back(newEntity);
+        quadFinder[newEntity] = this;
     }
     else
     {
         if (!alreadySplit)
         {
             Split();
-            this->Insert(newEntity);
+            Insert(newEntity);
+            return;
         }
         else
         {
@@ -94,6 +100,7 @@ void Quadtree::Insert(PhysicsComponent* newEntity)
             if (multipleChildren)
             {
                 entities.push_back(newEntity);
+                quadFinder[newEntity] = this;
             }
             else
             {
@@ -105,217 +112,142 @@ void Quadtree::Insert(PhysicsComponent* newEntity)
 
 void Quadtree::Remove(PhysicsComponent* entity)
 {
-    IRemove(entity);
+    Quadtree* quad = quadFinder[entity];
+    quad->entities.erase(std::remove(quad->entities.begin(), quad->entities.end(), entity));
+    quadFinder.erase(entity);
 }
 
-void Quadtree::Update(PhysicsComponent* changedEntity, Vector2 oldPosition)
+void Quadtree::Update(PhysicsComponent* changedEntity)
 {
-    Quadtree* oldQuad = FindSlot(changedEntity, oldPosition);
-    Quadtree* newQuad = FindSlot(changedEntity, changedEntity->position);
+    Remove(changedEntity);
+    Insert(changedEntity);
+}
 
-    oldQuad->Remove(changedEntity);
-    newQuad->Insert(changedEntity);
+void Quadtree::PerformInteractions(void(*functionPtr)(PhysicsComponent*, PhysicsComponent*))
+{
+    for (int i = 0; i < (int)(entities.size()) - 1; i++)
+    {
+        for (int j = i + 1; j < (int)(entities.size()); j++)
+        {
+            functionPtr(entities[i], entities[j]);
+        }
+    }
+    if (alreadySplit)
+    {
+        for (int i = 0; i < entities.size(); i++)
+        {
+            for (int c = 0; c < 4; c++)
+            {
+                branches[c]->PerformChildInteractions(functionPtr, entities[i]);
+            }
+        }
+        for (int i = 0; i < 4; i++)
+        {
+            branches[i]->PerformInteractions(functionPtr);
+        }
+    }
 }
 
 size_t Quadtree::TallyEntities()
 {
+    int sum = entities.size();
     if (alreadySplit)
     {
-        return branches[NW]->TallyEntities() + branches[NE]->TallyEntities() + branches[SW]->TallyEntities() + branches[SE]->TallyEntities();
+        for (int i = 0; i < 4; i++)
+        {
+            sum += branches[i]->TallyEntities();
+        }
     }
-    else
-    {
-        return entities.size();
-    }
+    return sum;
 }
 
 std::vector<PhysicsComponent*> Quadtree::GetAllEntities()
 {
-    std::vector<PhysicsComponent*> result;
+    std::vector<PhysicsComponent*> result = std::vector<PhysicsComponent*>(TallyEntities());
+    int index = 0;
+    std::copy(entities.begin(), entities.end(), result.begin() + index);
+    index += entities.size();
+    // In this case, iteration is better than recursion. Recursion would result in far more dynamic memory allocation
+    // Recursion:
     if (alreadySplit)
     {
-        std::vector<PhysicsComponent*> nwComps = branches[NW]->GetAllEntities();
-        result.insert(result.end(), nwComps.begin(), nwComps.end());
-        std::vector<PhysicsComponent*> neComps = branches[NE]->GetAllEntities();
-        result.insert(result.end(), neComps.begin(), neComps.end());
-        std::vector<PhysicsComponent*> swComps = branches[SW]->GetAllEntities();
-        result.insert(result.end(), swComps.begin(), swComps.end());
-        std::vector<PhysicsComponent*> seComps = branches[SE]->GetAllEntities();
-        result.insert(result.end(), seComps.begin(), seComps.end());
-    }
-    else
-    {
-        result.insert(result.end(), entities.begin(), entities.end());
+        for (int i = 0; i < 4; i++)
+        {
+            std::vector<PhysicsComponent*> branchComps = branches[i]->GetAllEntities();
+            std::copy(branchComps.begin(), branchComps.end(), result.begin() + index);
+            index += branchComps.size();
+        }
     }
     return result;
 }
 
-void Quadtree::IRemove(PhysicsComponent* entity)
+void Quadtree::CheckAndCollapseChildren()
 {
-    if (!alreadySplit)
-    {
-        entities.erase(std::remove(entities.begin(), entities.end(), entity));
-    }
-    else
-    {
-        Shape entityShape = entity->GetShape();
-        Rectangle recs[4] =
-        {
-            Rectangle{ branches[NW]->position.x, branches[NW]->position.y, branches[NW]->dimensions.x, branches[NW]->dimensions.y },
-            Rectangle{ branches[NE]->position.x, branches[NE]->position.y, branches[NE]->dimensions.x, branches[NE]->dimensions.y },
-            Rectangle{ branches[SW]->position.x, branches[SW]->position.y, branches[SW]->dimensions.x, branches[SW]->dimensions.y },
-            Rectangle{ branches[SE]->position.x, branches[SE]->position.y, branches[SE]->dimensions.x, branches[SE]->dimensions.y }
-        };
-        int recIndex = -1;
-        bool multipleChildren = false;
-        switch (entityShape.shapeType)
-        {
-        case (Shape::ShapeType::Circle):
-        {
-            for (int i = 0; i < 4; i++)
-            {
-                if (CheckCollisionCircleRec(entity->position, entityShape.shapeData.circleRadius, recs[i]))
-                {
-                    if (recIndex != -1)
-                    {
-                        multipleChildren = true;
-                        break;
-                    }
-                    recIndex = i;
-                }
-            }
-            break;
-        }
-        case (Shape::ShapeType::Rectangle):
-        {
-            float w = entityShape.shapeData.rectangleData.width;
-            float h = entityShape.shapeData.rectangleData.height;
-            Rectangle shapeRec = Rectangle{ entity->position.x - (w / 2.0f), entity->position.y - (h / 2.0f), w, h };
-            for (int i = 0; i < 4; i++)
-            {
-                if (CheckCollisionRecs(shapeRec, recs[i]))
-                {
-                    if (recIndex != -1)
-                    {
-                        multipleChildren = true;
-                        break;
-                    }
-                    recIndex = i;
-                }
-            }
-            break;
-        }
-        default:
-            break;
-        }
-        // If the entity fits within multiple children, it should go in the smallest node that fully contains it
-        if (multipleChildren)
-        {
-            entities.erase(std::remove(entities.begin(), entities.end(), entity));
-        }
-        else
-        {
-            branches[recIndex]->IRemove(entity);
-        }
-    }
-}
-
-void Quadtree::UpdateAll()
-{
+    int branchSum = 0;
     if (alreadySplit)
     {
-        if (TallyEntities() <= capacity)
+        // All children should be collapsed first
+        for (int i = 0; i < 4; i++)
         {
-            std::vector<PhysicsComponent*> allEntities = GetAllEntities();
-            entities = allEntities;
-            for (int i = 0; i < 4; i++)
-            {
-                delete branches[i];
-            }
+            branches[i]->CheckAndCollapseChildren();
         }
-        else
+        for (int i = 0; i < 4; i++)
         {
-            for (int i = 0; i < 4; i++)
-            {
-                branches[i]->UpdateAll();
-            }
+            branchSum += branches[i]->entities.size();
         }
     }
     else
     {
-        if (!alreadySplit && entities.size() > capacity)
+        branchSum = -1; // Not 0
+    }
+    if (TallyEntities() <= capacity || branchSum == 0)
+    {
+        std::vector<PhysicsComponent*> allEntities = GetAllEntities();
+        entities = allEntities;
+        for (int i = 0; i < 4; i++)
         {
-            Split();
+            delete branches[i];
+            branches[i] = nullptr;
+        }
+        for (PhysicsComponent* comp : allEntities)
+        {
+            quadFinder[comp] = this;
+        }
+        alreadySplit = false;
+    }
+}
+
+void Quadtree::PerformChildInteractions(void(*functionPtr)(PhysicsComponent*, PhysicsComponent*), PhysicsComponent* a)
+{
+    for (PhysicsComponent* b : entities)
+    {
+        functionPtr(a, b);
+    }
+    if (alreadySplit)
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            branches[i]->PerformChildInteractions(functionPtr, a);
         }
     }
 }
 
-Quadtree* Quadtree::FindSlot(PhysicsComponent* entity, Vector2 position)
+void Quadtree::DebugDraw()
 {
-    if (!alreadySplit)
+    DrawText(TextFormat("%i", entities.size()), position.x + 10 + (level * 10), position.y + 10, 10, BLACK);
+    for (PhysicsComponent* comp : entities)
     {
-        return this;
+        DrawCircle(comp->position.x, comp->position.y, 50.0f, BLUE);
+    }
+    if (alreadySplit)
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            branches[i]->DebugDraw();
+        }
     }
     else
     {
-        Shape entityShape = entity->GetShape();
-        Rectangle recs[4] =
-        {
-            Rectangle{ branches[NW]->position.x, branches[NW]->position.y, branches[NW]->dimensions.x, branches[NW]->dimensions.y },
-            Rectangle{ branches[NE]->position.x, branches[NE]->position.y, branches[NE]->dimensions.x, branches[NE]->dimensions.y },
-            Rectangle{ branches[SW]->position.x, branches[SW]->position.y, branches[SW]->dimensions.x, branches[SW]->dimensions.y },
-            Rectangle{ branches[SE]->position.x, branches[SE]->position.y, branches[SE]->dimensions.x, branches[SE]->dimensions.y }
-        };
-        int recIndex = -1;
-        bool multipleChildren = false;
-        switch (entityShape.shapeType)
-        {
-        case (Shape::ShapeType::Circle):
-        {
-            for (int i = 0; i < 4; i++)
-            {
-                if (CheckCollisionCircleRec(position, entityShape.shapeData.circleRadius, recs[i]))
-                {
-                    if (recIndex != -1)
-                    {
-                        multipleChildren = true;
-                        break;
-                    }
-                    recIndex = i;
-                }
-            }
-            break;
-        }
-        case (Shape::ShapeType::Rectangle):
-        {
-            float w = entityShape.shapeData.rectangleData.width;
-            float h = entityShape.shapeData.rectangleData.height;
-            Rectangle shapeRec = Rectangle{ position.x - (w / 2.0f), position.y - (h / 2.0f), w, h };
-            for (int i = 0; i < 4; i++)
-            {
-                if (CheckCollisionRecs(shapeRec, recs[i]))
-                {
-                    if (recIndex != -1)
-                    {
-                        multipleChildren = true;
-                        break;
-                    }
-                    recIndex = i;
-                }
-            }
-            break;
-        }
-        default:
-            break;
-        }
-        // If the entity fits within multiple children, it should go in the smallest node that fully contains it
-        if (multipleChildren)
-        {
-            return this;
-        }
-        else
-        {
-            return branches[recIndex]->FindSlot(entity, position);
-        }
+        DrawRectangleLines(position.x, position.y, dimensions.x, dimensions.y, RED);
     }
 }
