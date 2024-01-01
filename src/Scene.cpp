@@ -15,8 +15,17 @@ void Scene::Update()
         ent.Update();
     }
     physicsHandler.DebugDraw();
+
+    // Add deferred entities LAST
+    entities.insert(entities.end(), entitiesToAdd.begin(), entitiesToAdd.end());
+    entitiesToAdd.clear();
 }
 
 void Scene::AddEntity(Entity newEntity) {
     entities.push_back(newEntity);
+}
+
+void Scene::DeferAddEntity(Entity newEntity)
+{
+    entitiesToAdd.push_back(newEntity);
 }

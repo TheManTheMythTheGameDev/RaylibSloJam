@@ -1,6 +1,6 @@
 #pragma once
-#include "PhysicsComponent.h"
 #include "Quadtree.h"
+#include "PhysicsComponent.h"
 
 class PhysicsHandler
 {
@@ -17,11 +17,10 @@ public:
     }
     void CalculateSteps(float dTime);
     void Step();
-    static void ResolveCollision(PhysicsComponent* entity1, PhysicsComponent* entity2);
-    void Bounce(PhysicsComponent* mobileEntity, PhysicsComponent* staticEntity);
-    void ResolveCollision(PhysicsComponent* entity1, PhysicsComponent* entity2);
-    void AddEntity(PhysicsComponent* newEntity);
-    void RemoveEntity(PhysicsComponent* entity);
+    static void Bounce(class PhysicsComponent* mobileEntity, class PhysicsComponent* staticEntity);
+    static void ResolveCollision(class PhysicsComponent* entity1, class PhysicsComponent* entity2);
+    void AddEntity(class PhysicsComponent* newEntity);
+    void RemoveEntity(class PhysicsComponent* entity);
     void ClearEntities();
     ~PhysicsHandler()
     {

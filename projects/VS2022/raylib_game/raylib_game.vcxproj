@@ -354,6 +354,7 @@
     <ResourceCompile Include="..\..\..\src\raylib_game.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\src\CollisionListenComponent.cpp" />
     <ClCompile Include="..\..\..\src\ControllerComponent.cpp" />
     <ClCompile Include="..\..\..\src\Entity.cpp" />
     <ClCompile Include="..\..\..\src\GoalComponent.cpp" />
