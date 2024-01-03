@@ -148,6 +148,21 @@ void Quadtree::PerformInteractions(void(*functionPtr)(PhysicsComponent*, Physics
     }
 }
 
+void Quadtree::PerformFunction(void(*functionPtr)(PhysicsComponent*))
+{
+    for (PhysicsComponent* ent : entities)
+    {
+        functionPtr(ent);
+    }
+    if (alreadySplit)
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            branches[i]->PerformFunction(functionPtr);
+        }
+    }
+}
+
 size_t Quadtree::TallyEntities()
 {
     int sum = entities.size();

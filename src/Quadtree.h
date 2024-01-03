@@ -41,6 +41,24 @@ public:
     void Update(PhysicsComponent* changedEntity);
     // Runs a function that performs an interaction between all nearby entites
     void PerformInteractions(void (*functionPtr)(PhysicsComponent*, PhysicsComponent*));
+    // Runs a function on every entity in the quadtree
+    // This version also allows the function to take in another argument
+    template<typename T>
+    inline void PerformFunction(void (*functionPtr)(PhysicsComponent*, T), T args)
+    {
+        for (PhysicsComponent* ent : entities)
+        {
+            functionPtr(ent, args);
+        }
+        if (alreadySplit)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                branches[i]->PerformFunction<T>(functionPtr, args);
+            }
+        }
+    }
+    void PerformFunction(void (*functionPtr)(PhysicsComponent*));
 
     // Draw some nice rectangles for debugging purposes
     void DebugDraw();

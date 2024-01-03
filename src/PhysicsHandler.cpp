@@ -9,14 +9,50 @@ void PhysicsHandler::CalculateSteps(float dTime) {
 }
 
 void PhysicsHandler::Step() {
-    std::vector<PhysicsComponent*> allEntities = spatialPartition.GetAllEntities();
+    // To avoid calling GetAllEntities, which does a lot of dynamic memory allocation, let's set oldPosition this way instead
+    spatialPartition.PerformFunction([](PhysicsComponent* ent)
+        {
+            ent->oldPosition = ent->position;
+        });
+    // Equivalent to:
+    /*std::vector<PhysicsComponent*> allEntities = spatialPartition.GetAllEntities();
     for (PhysicsComponent* physicsEnt : allEntities)
     {
         physicsEnt->oldPosition = physicsEnt->position;
-    }
+    }*/
     spatialPartition.PerformInteractions(PhysicsInteraction);
     spatialPartition.CheckAndCollapseChildren();
-    allEntities = spatialPartition.GetAllEntities();
+
+    // Again, let's avoid GetAllEntities and dynamic memory allocation
+    spatialPartition.PerformFunction<Quadtree&>([](PhysicsComponent* physicsEnt, Quadtree& quad)
+        {
+            if (physicsEnt->mobile)
+            {
+                physicsEnt->velocity = Vector2Add(physicsEnt->velocity, Vector2Scale(physicsEnt->acceleration, stepTime));
+                physicsEnt->position = Vector2Add(physicsEnt->position, Vector2Scale(physicsEnt->velocity, stepTime));
+            }
+            if (physicsEnt->position.x < -borderLength)
+            {
+                physicsEnt->position.x += GetScreenWidth() + 2 * borderLength;
+            }
+            if (physicsEnt->position.x > GetScreenWidth() + borderLength)
+            {
+                physicsEnt->position.x -= GetScreenWidth() + 2 * borderLength;
+            }
+            if (physicsEnt->position.y < -borderLength)
+            {
+                physicsEnt->position.y += GetScreenHeight() + 2 * borderLength;
+            }
+            if (physicsEnt->position.y > GetScreenHeight() + borderLength)
+            {
+                physicsEnt->position.y -= GetScreenHeight() + 2 * borderLength;
+            }
+            if (physicsEnt->oldPosition.x != physicsEnt->position.x || physicsEnt->oldPosition.y != physicsEnt->position.y)
+            {
+                quad.Update(physicsEnt);
+            }
+        }, spatialPartition);
+    /*allEntities = spatialPartition.GetAllEntities();
     for (PhysicsComponent* physicsEnt : allEntities) 
     {
         if (physicsEnt->mobile)
@@ -44,7 +80,7 @@ void PhysicsHandler::Step() {
         {
             spatialPartition.Update(physicsEnt);
         }
-    }
+    }*/
 }
 
 void PhysicsHandler::Bounce(PhysicsComponent* mobileEntity, PhysicsComponent* staticEntity)
