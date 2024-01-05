@@ -89,7 +89,7 @@ void PhysicsHandler::Step() {
     }*/
     auto endTime = std::chrono::high_resolution_clock::now();
     auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(endTime - beginTime);
-    std::cout << "Physics time: " << elapsed.count() << " microseconds (" << elapsed.count() / 1000.0f << ") ms\n";
+    // std::cout << "Physics time: " << elapsed.count() << " microseconds (" << elapsed.count() / 1000.0f << ") ms\n";
 }
 
 bool PhysicsHandler::pointInBox(Vector2 pointPos, Vector2 rectPos, float width, float height, float rotation)
@@ -239,7 +239,6 @@ void PhysicsHandler::PhysicsInteraction(PhysicsComponent* entity1, PhysicsCompon
             corners[1] = Vector2{ rectPos.x - (width * cosf(0.0f) / 2) - (height * sinf(0.0f) / 2), rectPos.y - (width * sinf(0.0f) / 2) + (height * cosf(0.0f) / 2) };
             corners[2] = Vector2Add(rectPos, Vector2Subtract(rectPos, corners[0]));
             corners[3] = Vector2Add(rectPos, Vector2Subtract(rectPos, corners[1]));
-            // std::cout<< "(" << corners[0].x << ", " <<corners[0].y << ")" <<std::endl;
             for (int i = 0; i < 4; i++)
             {
                 // if(i == 0)
@@ -256,7 +255,6 @@ void PhysicsHandler::PhysicsInteraction(PhysicsComponent* entity1, PhysicsCompon
         }
         if (intersecting)
         {
-            // std::cout<<"Ouch"<<std::endl;
             Vector2 collisionBoxCorners[4];
             float collisionBoxWidth = width + 2 * radius;
             float collisionBoxHeight = height + 2 * radius;
@@ -264,19 +262,18 @@ void PhysicsHandler::PhysicsInteraction(PhysicsComponent* entity1, PhysicsCompon
             collisionBoxCorners[1] = Vector2{ rectPos.x - (collisionBoxWidth * cosf(0.0f) / 2) - (collisionBoxHeight * sinf(0.0f) / 2), rectPos.y - (collisionBoxWidth * sinf(0.0f) / 2) + (collisionBoxHeight * cosf(0.0f) / 2) };
             collisionBoxCorners[2] = Vector2Add(rectPos, Vector2Subtract(rectPos, collisionBoxCorners[0]));
             collisionBoxCorners[3] = Vector2Add(rectPos, Vector2Subtract(rectPos, collisionBoxCorners[1]));
-            // std::cout<< "(" << collisionBoxCorners[1].x << ", " <<collisionBoxCorners[1].y << ")" <<std::endl;
             Vector2 rayStart;
             Vector2 rayDirection;
             Vector2 oldPos = Vector2Subtract(circlePos, circleEntity->velocity);
             if (pointInBox(circlePos, rectPos, collisionBoxWidth, collisionBoxHeight, 0.0f))
             {
                 rayStart = circlePos;
-                rayDirection = Vector2Subtract(oldPos, circlePos);
+                rayDirection = Vector2Subtract(circlePos, oldPos);
             }
             else
             {
                 rayStart = oldPos;
-                rayDirection = Vector2Subtract(circlePos, oldPos);
+                rayDirection = Vector2Subtract(oldPos, circlePos);
             }
             int bestIntersectionCorner = -1;
             float shortestIntersection = 0.0f;
@@ -285,14 +282,8 @@ void PhysicsHandler::PhysicsInteraction(PhysicsComponent* entity1, PhysicsCompon
             {
                 Vector2 v1 = Vector2Subtract(rayStart, collisionBoxCorners[i]);
                 Vector2 v2 = Vector2Subtract(collisionBoxCorners[(i + 1) % 4], collisionBoxCorners[i]);
-                // std::cout<< "v1: (" << v1.x << ", " << v1.y << ")" <<std::endl;
-                // std::cout<< "v2: (" << v2.x << ", " << v2.y << ")" <<std::endl;
-                // std::cout<< "v3: (" << v3.x << ", " << v3.y << ")" <<std::endl;
                 float rayIntersectTime = abs(v2.x * v1.y - v2.y * v1.x) / Vector2DotProduct(v2, v3);
-                std::cout << Vector2DotProduct(v2, v3) << std::endl;
                 float segmentIntersectTime = Vector2DotProduct(v1, v3) / Vector2DotProduct(v2, v3);
-                // std::cout << rayIntersectTime << std::endl;
-                // std::cout << segmentIntersectTime << std::endl;
                 if (rayIntersectTime > 0 && segmentIntersectTime > 0 && segmentIntersectTime < 1)
                 {
                     float intersectDist = Vector2LengthSqr(Vector2Scale(rayDirection, rayIntersectTime));
@@ -314,10 +305,9 @@ void PhysicsHandler::PhysicsInteraction(PhysicsComponent* entity1, PhysicsCompon
             Vector2 bounceWall = Vector2Normalize(Vector2Subtract(corner2, corner1));
             std::cout << bounceWall.x << " " << bounceWall.y << std::endl;
             Bounce(circleEntity, { -bounceWall.y, bounceWall.x });
-            // float lineLengthSqr = Vector2DistanceSqr(corner2, corner1);
-            // float t = Vector2DotProduct(Vector2Subtract(circlePos, corner1), Vector2Subtract(corner2, corner1)) / lineLengthSqr;
-            // circleEntity->position = Vector2Add(corner1, Vector2Scale(Vector2Subtract(corner2, corner1), t));
-            // return Vector2DistanceSqr(point, Vector2Add(corner1, Vector2Scale(Vector2Subtract(corner2, corner1), t)));
+            float lineLengthSqr = Vector2DistanceSqr(corner2, corner1);
+            float t = Vector2DotProduct(Vector2Subtract(circlePos, corner1), Vector2Subtract(corner2, corner1)) / lineLengthSqr;
+            circleEntity->position = Vector2Add(corner1, Vector2Scale(Vector2Subtract(corner2, corner1), t));
         }
         // bool interesctingVert = circleVertOffset < radius + width / 2;
         // bool interesctingHoriz = circleVertOffset < radius + height / 2;
