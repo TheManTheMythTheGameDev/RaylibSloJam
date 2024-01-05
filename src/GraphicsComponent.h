@@ -8,7 +8,7 @@ public:
     Texture2D texture;
     float radius;
 
-    GraphicsComponent(Texture2D texture_, float radius_ = 100.0f)
+    GraphicsComponent(Texture2D texture_, float radius_ = 20.0f)
     {
         texture = texture_;
         radius = radius_;

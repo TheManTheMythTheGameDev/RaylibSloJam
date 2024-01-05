@@ -94,15 +94,18 @@ int main(void)
     SetTextureFilter(target.texture, TEXTURE_FILTER_BILINEAR);
 
     defaultTexture = LoadTexture("src/vecteezy_white-circle-png_21115771_475.png");
+    static Texture2D wallTexture = LoadTexture("src/Solid_white_bordered.png");
     static Texture2D endScreenTexture = LoadTexture("src/EndScreen.png");
 
     ControllerComponent* playerController =  new ControllerComponent();
-    Entity examplePlayer = Entity(Vector2{ 100.0f, 100.0f }, 0, new GraphicsComponent(defaultTexture, 42.0f), new PhysicsComponent(sampleScene.physicsHandler, Shape(Shape::ShapeType::Circle, Shape::ShapeData{ 30.0f }), true), playerController);
-    Entity exampleGolfBall = Entity(Vector2{ 500.0f, 300.0f }, 1, new GraphicsComponent(defaultTexture, 42.0f), new PhysicsComponent(sampleScene.physicsHandler, Shape(Shape::ShapeType::Circle, Shape::ShapeData{ 30.0f }), true));
-    Entity exampleGoal = Entity(Vector2{ 1180.0f, 620.0f }, 0, new GraphicsComponent(defaultTexture, 130.0f), new PhysicsComponent(sampleScene.physicsHandler, Shape(Shape::ShapeType::Circle, Shape::ShapeData{ 100.0f })), new GoalComponent(1, playerController, &sampleScene, endScreenTexture));
+    Entity examplePlayer = Entity(Vector2{ 100.0f, 100.0f }, 0.0f, 0, new GraphicsComponent(defaultTexture, 42.0f), new PhysicsComponent(sampleScene.physicsHandler, Shape(Shape::ShapeType::Circle, Shape::ShapeData{ 30.0f }), true), playerController);
+    Entity exampleGolfBall = Entity(Vector2{ 500.0f, 300.0f }, 0.0f, 1, new GraphicsComponent(defaultTexture, 42.0f), new PhysicsComponent(sampleScene.physicsHandler, Shape(Shape::ShapeType::Circle, Shape::ShapeData{ 30.0f }), true));
+    Entity exampleGoal = Entity(Vector2{ 1180.0f, 620.0f }, 0.0f, 0, new GraphicsComponent(defaultTexture, 130.0f), new PhysicsComponent(sampleScene.physicsHandler, Shape(Shape::ShapeType::Circle, Shape::ShapeData{ 100.0f })), new GoalComponent(1, playerController, &sampleScene, endScreenTexture));
+    Entity exampleWall = Entity(Vector2{400.0f, 200.0f}, 0.0f, 0,  new GraphicsComponent(wallTexture, 20.0f), new PhysicsComponent(sampleScene.physicsHandler, Shape(Shape::ShapeType::Rectangle, Shape::ShapeData{ 50.0f })));
     sampleScene.AddEntity(examplePlayer);
-    sampleScene.AddEntity(exampleGolfBall);
-    sampleScene.AddEntity(exampleGoal);
+    // sampleScene.AddEntity(exampleGolfBall);
+    sampleScene.AddEntity(exampleWall);
+    // sampleScene.AddEntity(exampleGoal);
 
 #if defined(PLATFORM_WEB)
     emscripten_set_main_loop(UpdateDrawFrame, 60, 1);
@@ -121,6 +124,7 @@ int main(void)
     //--------------------------------------------------------------------------------------
     UnloadRenderTexture(target);
     UnloadTexture(defaultTexture);
+    UnloadTexture(wallTexture);
     UnloadTexture(endScreenTexture);
     
     // TODO: Unload all loaded resources at this point
@@ -143,7 +147,7 @@ void UpdateDrawFrame(void)
     //----------------------------------------------------------------------------------
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
     {
-        Entity newEntity = Entity(GetMousePosition(), 0, new GraphicsComponent(defaultTexture), new PhysicsComponent(sampleScene.physicsHandler, Shape(Shape::ShapeType::Circle, Shape::ShapeData{ (20.0f) }), 1.0f));
+        Entity newEntity = Entity(GetMousePosition(), 0.0f, 0, new GraphicsComponent(defaultTexture), new PhysicsComponent(sampleScene.physicsHandler, Shape(Shape::ShapeType::Circle, Shape::ShapeData{ (20.0f) }), 1.0f));
         sampleScene.AddEntity(newEntity);
     }
 

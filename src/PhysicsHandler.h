@@ -17,8 +17,10 @@ public:
     }
     void CalculateSteps(float dTime);
     void Step();
-    static void Bounce(class PhysicsComponent* mobileEntity, class PhysicsComponent* staticEntity);
-    static void ResolveCollision(class PhysicsComponent* entity1, class PhysicsComponent* entity2);
+    static bool pointInBox(Vector2 pointPos, Vector2 rectPos, float width, float length, float rotation);
+    static float DistanceToLineSegment(Vector2 point, Vector2 corner1, Vector2 corner2);
+    static void Bounce(class PhysicsComponent* mobileEntity, Vector2 normalUnitVector);
+    static void ResolveCircleCollision(class PhysicsComponent* entity1, class PhysicsComponent* entity2);
     void AddEntity(class PhysicsComponent* newEntity);
     void RemoveEntity(class PhysicsComponent* entity);
     void ClearEntities();

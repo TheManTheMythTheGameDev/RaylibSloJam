@@ -18,15 +18,17 @@ class Entity
 {
 public:
     std::bitset<8> tag;
-    Entity(Vector2 _pos = Vector2{ 0.0f, 0.0f }, int tagIndex = 0)
+    Entity(Vector2 _pos = Vector2{ 0.0f, 0.0f }, float _rotation = 0.0f, int tagIndex = 0)
     {
         pos = _pos;
+        rotation = _rotation;
         tag.set(tagIndex);
     }
     template<typename... Ts>
-    Entity(Vector2 _pos, int tagIndex = 0, Ts*... _components)
+    Entity(Vector2 _pos = Vector2{ 0.0f, 0.0f }, float _rotation = 0.0f, int tagIndex = 0, Ts*... _components)
     {
         pos = _pos;
+        rotation = _rotation;
         tag.set(tagIndex);
         int ints[] = { AddComponentInternal(_components)... };
     }
@@ -61,6 +63,7 @@ public:
     }
 
     Vector2 pos;
+    float rotation;
 private:
     std::unordered_map<int, Component*> components;
 
