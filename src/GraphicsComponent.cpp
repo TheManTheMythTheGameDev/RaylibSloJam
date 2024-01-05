@@ -6,7 +6,7 @@ void GraphicsComponent::Update(Entity& parentEntity)
     DrawTexturePro(
         texture,
         Rectangle{0, 0, float(texture.width), float(texture.height)},
-        Rectangle{parentEntity.pos.x, parentEntity.pos.y, radius * 2, radius * 2},
-        Vector2{radius, radius},
-        0, RED);
+        Rectangle{parentEntity.pos.x, parentEntity.pos.y, width * 2, height * 2},
+        Vector2{width, height},
+        rotation, RED);
 }

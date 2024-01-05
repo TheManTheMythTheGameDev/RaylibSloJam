@@ -211,7 +211,7 @@ void PhysicsHandler::PhysicsInteraction(PhysicsComponent* entity1, PhysicsCompon
         }
         float radius = circleEntity->GetShape().shapeData.circleRadius;
         float width = rectEntity->GetShape().shapeData.rectangleData.width;
-        float height = rectEntity->GetShape().shapeData.rectangleData.width;
+        float height = rectEntity->GetShape().shapeData.rectangleData.height;
         float rectRotation = rectEntity->rotation;
         Vector2 circlePos = circleEntity->position;
         Vector2 rectPos = rectEntity->position;
