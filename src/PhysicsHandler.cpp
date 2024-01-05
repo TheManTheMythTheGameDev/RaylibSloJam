@@ -89,7 +89,7 @@ void PhysicsHandler::Step() {
     }*/
     auto endTime = std::chrono::high_resolution_clock::now();
     auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(endTime - beginTime);
-    std::cout << "Physics time: " << elapsed.count() << " microseconds\n";
+    std::cout << "Physics time: " << elapsed.count() << " microseconds (" << elapsed.count() / 1000.0f << ") ms\n";
 }
 
 bool PhysicsHandler::pointInBox(Vector2 pointPos, Vector2 rectPos, float width, float height, float rotation)
