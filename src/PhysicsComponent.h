@@ -9,6 +9,7 @@ class PhysicsComponent : public Component
 public:
     bool mobile;
     float mass;
+    float rotation;
     Vector2 oldPosition;
     Vector2 position;
     Vector2 velocity;

@@ -17,6 +17,7 @@ PhysicsComponent::~PhysicsComponent()
 
 void PhysicsComponent::OnAdd(Entity& parentEntity)
 {
+    rotation = parentEntity.rotation;
     position = parentEntity.pos;
     oldPosition = parentEntity.pos;
     physicsHandler->AddEntity(this);

@@ -89,7 +89,7 @@ void PhysicsHandler::Step() {
     }*/
     auto endTime = std::chrono::high_resolution_clock::now();
     auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(endTime - beginTime);
-    // std::cout << "Physics time: " << elapsed.count() << " microseconds (" << elapsed.count() / 1000.0f << ") ms\n";
+    // std::cout << "Physics time: " << elapsed.count() << " microseconds (" << elapsed.count() / 100rectRotation << ") ms\n";
 }
 
 bool PhysicsHandler::pointInBox(Vector2 pointPos, Vector2 rectPos, float width, float height, float rotation)
@@ -212,9 +212,10 @@ void PhysicsHandler::PhysicsInteraction(PhysicsComponent* entity1, PhysicsCompon
         float radius = circleEntity->GetShape().shapeData.circleRadius;
         float width = rectEntity->GetShape().shapeData.rectangleData.width;
         float height = rectEntity->GetShape().shapeData.rectangleData.width;
+        float rectRotation = rectEntity->rotation;
         Vector2 circlePos = circleEntity->position;
         Vector2 rectPos = rectEntity->position;
-        // float horizWallSlope = tanf(0.0f);
+        // float horizWallSlope = tanf(rectRotation);
         // float vertWallSlope = tanf(PI / 2);
         // float horizWallOffset = -horizWallSlope * rectPos.x + rectPos.y;
         // float vertWallOffset = -vertWallSlope * rectPos.x + rectPos.y;
@@ -228,15 +229,15 @@ void PhysicsHandler::PhysicsInteraction(PhysicsComponent* entity1, PhysicsCompon
         //     circleHorizOffset = abs(circlePos.y - (horizWallSlope * circlePos.x + horizWallOffset)) / sqrt(pow(horizWallOffset, 2) + 1);
         //     intersecting = true;
         // }
-        if (pointInBox(circlePos, rectPos, width, height, 0.0f))
+        if (pointInBox(circlePos, rectPos, width, height, rectRotation))
         {
             intersecting = true;
         }
         else
         {
             Vector2 corners[4];
-            corners[0] = Vector2{ rectPos.x + (width * cosf(0.0f) / 2) - (height * sinf(0.0f) / 2), rectPos.y + (width * sinf(0.0f) / 2) + (height * cosf(0.0f) / 2) };
-            corners[1] = Vector2{ rectPos.x - (width * cosf(0.0f) / 2) - (height * sinf(0.0f) / 2), rectPos.y - (width * sinf(0.0f) / 2) + (height * cosf(0.0f) / 2) };
+            corners[0] = Vector2{ rectPos.x + (width * cosf(rectRotation) / 2) - (height * sinf(rectRotation) / 2), rectPos.y + (width * sinf(rectRotation) / 2) + (height * cosf(rectRotation) / 2) };
+            corners[1] = Vector2{ rectPos.x - (width * cosf(rectRotation) / 2) - (height * sinf(rectRotation) / 2), rectPos.y - (width * sinf(rectRotation) / 2) + (height * cosf(rectRotation) / 2) };
             corners[2] = Vector2Add(rectPos, Vector2Subtract(rectPos, corners[0]));
             corners[3] = Vector2Add(rectPos, Vector2Subtract(rectPos, corners[1]));
             for (int i = 0; i < 4; i++)
@@ -258,14 +259,14 @@ void PhysicsHandler::PhysicsInteraction(PhysicsComponent* entity1, PhysicsCompon
             Vector2 collisionBoxCorners[4];
             float collisionBoxWidth = width + 2 * radius;
             float collisionBoxHeight = height + 2 * radius;
-            collisionBoxCorners[0] = Vector2{ rectPos.x + (collisionBoxWidth * cosf(0.0f) / 2) - (collisionBoxHeight * sinf(0.0f) / 2), rectPos.y + (collisionBoxWidth * sinf(0.0f) / 2) + (collisionBoxHeight * cosf(0.0f) / 2) };
-            collisionBoxCorners[1] = Vector2{ rectPos.x - (collisionBoxWidth * cosf(0.0f) / 2) - (collisionBoxHeight * sinf(0.0f) / 2), rectPos.y - (collisionBoxWidth * sinf(0.0f) / 2) + (collisionBoxHeight * cosf(0.0f) / 2) };
+            collisionBoxCorners[0] = Vector2{ rectPos.x + (collisionBoxWidth * cosf(rectRotation) / 2) - (collisionBoxHeight * sinf(rectRotation) / 2), rectPos.y + (collisionBoxWidth * sinf(rectRotation) / 2) + (collisionBoxHeight * cosf(rectRotation) / 2) };
+            collisionBoxCorners[1] = Vector2{ rectPos.x - (collisionBoxWidth * cosf(rectRotation) / 2) - (collisionBoxHeight * sinf(rectRotation) / 2), rectPos.y - (collisionBoxWidth * sinf(rectRotation) / 2) + (collisionBoxHeight * cosf(rectRotation) / 2) };
             collisionBoxCorners[2] = Vector2Add(rectPos, Vector2Subtract(rectPos, collisionBoxCorners[0]));
             collisionBoxCorners[3] = Vector2Add(rectPos, Vector2Subtract(rectPos, collisionBoxCorners[1]));
             Vector2 rayStart;
             Vector2 rayDirection;
             Vector2 oldPos = Vector2Subtract(circlePos, circleEntity->velocity);
-            if (pointInBox(circlePos, rectPos, collisionBoxWidth, collisionBoxHeight, 0.0f))
+            if (pointInBox(circlePos, rectPos, collisionBoxWidth, collisionBoxHeight, rectRotation))
             {
                 rayStart = circlePos;
                 rayDirection = Vector2Subtract(circlePos, oldPos);
@@ -276,7 +277,7 @@ void PhysicsHandler::PhysicsInteraction(PhysicsComponent* entity1, PhysicsCompon
                 rayDirection = Vector2Subtract(oldPos, circlePos);
             }
             int bestIntersectionCorner = -1;
-            float shortestIntersection = 0.0f;
+            float shortestIntersection = rectRotation;
             Vector2 v3 = { -rayDirection.y, rayDirection.x };
             for (int i = 0; i < 4; i++)
             {
