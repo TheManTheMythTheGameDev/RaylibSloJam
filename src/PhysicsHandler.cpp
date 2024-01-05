@@ -103,11 +103,6 @@ float PhysicsHandler::DistanceToLineSegment(Vector2 point, Vector2 corner1, Vect
         return Vector2Distance(corner1, point);
     }
     float t = Clamp(Vector2DotProduct(Vector2Subtract(point, corner1), Vector2Subtract(corner2, corner1)) / lineLengthSqr, 0, 1);
-    //  std::cout << point.x << " " << point.y << std::endl;
-    // std::cout << Vector2Subtract(point, corner1).x << " " << Vector2Subtract(point, corner1).y << std::endl;
-    // std::cout << Vector2DotProduct(Vector2Subtract(point, corner1), Vector2Subtract(corner2, corner1)) << std::endl;
-    // std::cout << Vector2DotProduct(Vector2Subtract(point, corner1), Vector2Subtract(corner2, corner1)) / lineLengthSqr << std::endl;
-    // std::cout << t << std::endl;
     Vector2 pivotPoint = Vector2Add(corner1, Vector2Scale(Vector2Subtract(corner2, corner1), t));
     DrawCircle(pivotPoint.x, pivotPoint.y, 5, PURPLE);
     return Vector2DistanceSqr(point, Vector2Add(corner1, Vector2Scale(Vector2Subtract(corner2, corner1), t)));
@@ -232,7 +227,7 @@ void PhysicsHandler::PhysicsInteraction(PhysicsComponent* entity1, PhysicsCompon
         {
             Vector2 corners[4];
             corners[0] = Vector2{ rectPos.x + (width * cosf(0.0f) / 2) - (height * sinf(0.0f) / 2), rectPos.y + (width * sinf(0.0f) / 2) + (height * cosf(0.0f) / 2) };
-            corners[1] = Vector2{ rectPos.x + (width * cosf(0.0f) / 2) + (height * sinf(0.0f) / 2), rectPos.y + (width * sinf(0.0f) / 2) - (height * cosf(0.0f) / 2) };
+            corners[1] = Vector2{ rectPos.x - (width * cosf(0.0f) / 2) - (height * sinf(0.0f) / 2), rectPos.y - (width * sinf(0.0f) / 2) + (height * cosf(0.0f) / 2) };
             corners[2] = Vector2Add(rectPos, Vector2Subtract(rectPos, corners[0]));
             corners[3] = Vector2Add(rectPos, Vector2Subtract(rectPos, corners[1]));
             // std::cout<< "(" << corners[0].x << ", " <<corners[0].y << ")" <<std::endl;
@@ -252,28 +247,68 @@ void PhysicsHandler::PhysicsInteraction(PhysicsComponent* entity1, PhysicsCompon
         }
         if (intersecting)
         {
-            std::cout<<"Ouch"<<std::endl;
+            // std::cout<<"Ouch"<<std::endl;
             Vector2 collisionBoxCorners[4];
             float collisionBoxWidth = width + 2 * radius;
             float collisionBoxHeight = height + 2 * radius;
             collisionBoxCorners[0] = Vector2{ rectPos.x + (collisionBoxWidth * cosf(0.0f) / 2) - (collisionBoxHeight * sinf(0.0f) / 2), rectPos.y + (collisionBoxWidth * sinf(0.0f) / 2) + (collisionBoxHeight * cosf(0.0f) / 2) };
-            collisionBoxCorners[1] = Vector2{ rectPos.x + (collisionBoxWidth * cosf(0.0f) / 2) + (collisionBoxHeight * sinf(0.0f) / 2), rectPos.y + (collisionBoxWidth * sinf(0.0f) / 2) - (collisionBoxHeight * cosf(0.0f) / 2) };
+            collisionBoxCorners[1] = Vector2{ rectPos.x - (collisionBoxWidth * cosf(0.0f) / 2) - (collisionBoxHeight * sinf(0.0f) / 2), rectPos.y - (collisionBoxWidth * sinf(0.0f) / 2) + (collisionBoxHeight * cosf(0.0f) / 2) };
             collisionBoxCorners[2] = Vector2Add(rectPos, Vector2Subtract(rectPos, collisionBoxCorners[0]));
             collisionBoxCorners[3] = Vector2Add(rectPos, Vector2Subtract(rectPos, collisionBoxCorners[1]));
+            // std::cout<< "(" << collisionBoxCorners[1].x << ", " <<collisionBoxCorners[1].y << ")" <<std::endl;
             Vector2 rayStart;
             Vector2 rayDirection;
+            Vector2 oldPos = Vector2Subtract(circlePos, circleEntity->velocity);
             if (pointInBox(circlePos, rectPos, collisionBoxWidth, collisionBoxHeight, 0.0f))
             {
                 rayStart = circlePos;
-                rayDirection = circleEntity->oldPosition;
+                rayDirection = Vector2Subtract(oldPos, circlePos);
             }
             else
             {
-                rayStart = circleEntity->oldPosition;
-                rayDirection = circlePos;
+                rayStart = oldPos;
+                rayDirection = Vector2Subtract(circlePos, oldPos);
             }
-            // Implement Bounce logic
-            // Bounce();
+            int bestIntersectionCorner = -1;
+            float shortestIntersection = 0.0f;
+            Vector2 v3 = { -rayDirection.y, rayDirection.x };
+            for (int i = 0; i < 4; i++)
+            {
+                Vector2 v1 = Vector2Subtract(rayStart, collisionBoxCorners[i]);
+                Vector2 v2 = Vector2Subtract(collisionBoxCorners[(i + 1) % 4], collisionBoxCorners[i]);
+                // std::cout<< "v1: (" << v1.x << ", " << v1.y << ")" <<std::endl;
+                // std::cout<< "v2: (" << v2.x << ", " << v2.y << ")" <<std::endl;
+                // std::cout<< "v3: (" << v3.x << ", " << v3.y << ")" <<std::endl;
+                float rayIntersectTime = abs(v2.x * v1.y - v2.y * v1.x) / Vector2DotProduct(v2, v3);
+                std::cout << Vector2DotProduct(v2, v3) << std::endl;
+                float segmentIntersectTime = Vector2DotProduct(v1, v3) / Vector2DotProduct(v2, v3);
+                // std::cout << rayIntersectTime << std::endl;
+                // std::cout << segmentIntersectTime << std::endl;
+                if (rayIntersectTime > 0 && segmentIntersectTime > 0 && segmentIntersectTime < 1)
+                {
+                    float intersectDist = Vector2LengthSqr(Vector2Scale(rayDirection, rayIntersectTime));
+                    if (bestIntersectionCorner == -1)
+                    {
+                        bestIntersectionCorner = i;
+                        shortestIntersection = intersectDist;
+                    }
+                    else if (intersectDist < shortestIntersection)
+                    {
+                        bestIntersectionCorner = i;
+                        shortestIntersection = intersectDist;
+                    }
+                }
+            }
+            std::cout << bestIntersectionCorner << std::endl;
+            Vector2 corner1 = collisionBoxCorners[bestIntersectionCorner];
+            Vector2 corner2 = collisionBoxCorners[(bestIntersectionCorner + 1) % 4];
+            Vector2 bounceWall = Vector2Normalize(Vector2Subtract(corner2, corner1));
+            std::cout << bounceWall.x << " " << bounceWall.y << std::endl;
+            Bounce(circleEntity, { -bounceWall.y, bounceWall.x });
+            // float lineLengthSqr = Vector2DistanceSqr(corner2, corner1);
+            // float t = Vector2DotProduct(Vector2Subtract(circlePos, corner1), Vector2Subtract(corner2, corner1)) / lineLengthSqr;
+            // circleEntity->position = Vector2Add(corner1, Vector2Scale(Vector2Subtract(corner2, corner1), t));
+            // return Vector2DistanceSqr(point, Vector2Add(corner1, Vector2Scale(Vector2Subtract(corner2, corner1), t)));
         }
         // bool interesctingVert = circleVertOffset < radius + width / 2;
         // bool interesctingHoriz = circleVertOffset < radius + height / 2;
