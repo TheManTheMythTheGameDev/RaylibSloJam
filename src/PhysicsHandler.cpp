@@ -1,4 +1,5 @@
 #include "PhysicsHandler.h"
+#include <chrono>
 
 void PhysicsHandler::CalculateSteps(float dTime) {
     currentTime += dTime;
@@ -9,6 +10,8 @@ void PhysicsHandler::CalculateSteps(float dTime) {
 }
 
 void PhysicsHandler::Step() {
+    auto beginTime = std::chrono::high_resolution_clock::now();
+
     // To avoid calling GetAllEntities, which does a lot of dynamic memory allocation, let's set oldPosition this way instead
     spatialPartition.PerformFunction([](PhysicsComponent* ent)
         {
@@ -20,11 +23,11 @@ void PhysicsHandler::Step() {
     {
         physicsEnt->oldPosition = physicsEnt->position;
     }*/
-    spatialPartition.PerformInteractions(PhysicsInteraction);
     spatialPartition.CheckAndCollapseChildren();
+    spatialPartition.PerformInteractions(PhysicsInteraction);
 
     // Again, let's avoid GetAllEntities and dynamic memory allocation
-    spatialPartition.PerformFunction<Quadtree&>([](PhysicsComponent* physicsEnt, Quadtree& quad)
+    spatialPartition.PerformFunction([](PhysicsComponent* physicsEnt)
         {
             if (physicsEnt->mobile)
             {
@@ -47,6 +50,9 @@ void PhysicsHandler::Step() {
             {
                 physicsEnt->position.y -= GetScreenHeight() + 2 * borderLength;
             }
+        });
+    spatialPartition.PerformFunction<Quadtree&>([](PhysicsComponent* physicsEnt, Quadtree& quad)
+        {
             if (physicsEnt->oldPosition.x != physicsEnt->position.x || physicsEnt->oldPosition.y != physicsEnt->position.y)
             {
                 quad.Update(physicsEnt);
@@ -81,6 +87,9 @@ void PhysicsHandler::Step() {
             spatialPartition.Update(physicsEnt);
         }
     }*/
+    auto endTime = std::chrono::high_resolution_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(endTime - beginTime);
+    std::cout << "Physics time: " << elapsed.count() << " microseconds (" << elapsed.count() / 1000.0f << ") ms\n";
 }
 
 bool PhysicsHandler::pointInBox(Vector2 pointPos, Vector2 rectPos, float width, float height, float rotation)
