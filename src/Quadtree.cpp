@@ -250,10 +250,10 @@ void Quadtree::PerformChildInteractions(void(*functionPtr)(PhysicsComponent*, Ph
 void Quadtree::DebugDraw()
 {
     DrawText(TextFormat("%i", entities.size()), position.x + 10 + (level * 10), position.y + 10, 10, BLACK);
-    // for (PhysicsComponent* comp : entities)
-    // {
-    //     DrawCircle(comp->position.x, comp->position.y, 50.0f, BLUE);
-    // }
+    for (PhysicsComponent* comp : entities)
+    {
+        DrawCircle(comp->position.x, comp->position.y, 50.0f, Color{ 0, 0, 255, 30 });
+    }
     if (alreadySplit)
     {
         for (int i = 0; i < 4; i++)
