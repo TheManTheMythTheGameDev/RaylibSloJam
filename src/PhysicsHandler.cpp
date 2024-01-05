@@ -97,14 +97,6 @@ bool PhysicsHandler::pointInBox(Vector2 pointPos, Vector2 rectPos, float width, 
     Vector2 rectToPoint = Vector2Subtract(pointPos, rectPos);
     float currentRotation = atan2f(-rectToPoint.y, rectToPoint.x) - rotation;
     std::cout << currentRotation << std::endl;
-    // if (rectToPoint.x < 0)
-    // {
-    //     currentRotation += PI;
-    // }
-    // if (rectToPoint.y > 0 ^ rectToPoint.x > 0)
-    // {
-    //     currentRotation += PI;
-    // }
     rectToPoint = Vector2Scale({ cosf(currentRotation), sinf(currentRotation) }, Vector2Length(rectToPoint));
     return rectToPoint.x < rectPos.x + width / 2 && rectToPoint.x > rectPos.x - width / 2 && rectToPoint.y < rectPos.y + height / 2 && rectToPoint.y > rectPos.y - height / 2;
 }
@@ -220,12 +212,6 @@ void PhysicsHandler::PhysicsInteraction(PhysicsComponent* entity1, PhysicsCompon
         float rectRotation = rectEntity->rotation;
         Vector2 circlePos = circleEntity->position;
         Vector2 rectPos = rectEntity->position;
-        // float horizWallSlope = tanf(rectRotation);
-        // float vertWallSlope = tanf(PI / 2);
-        // float horizWallOffset = -horizWallSlope * rectPos.x + rectPos.y;
-        // float vertWallOffset = -vertWallSlope * rectPos.x + rectPos.y;
-        // float circleVertOffset = abs(circlePos.y - (vertWallSlope * circlePos.x + vertWallOffset)) / sqrt(pow(vertWallOffset, 2) + 1);
-        // float circleHorizOffset = abs(circlePos.y - (horizWallSlope * circlePos.x + horizWallOffset)) / sqrt(pow(horizWallOffset, 2) + 1);
         bool intersecting = false;
         bool circleInBox = false;
         if (pointInBox(circlePos, rectPos, width, height, rectRotation))
@@ -242,11 +228,6 @@ void PhysicsHandler::PhysicsInteraction(PhysicsComponent* entity1, PhysicsCompon
             corners[3] = Vector2Add(rectPos, Vector2Subtract(rectPos, corners[1]));
             for (int i = 0; i < 4; i++)
             {
-                // if(i == 0)
-                // {
-                //     DrawLine(200, 0, 200, 200, PURPLE);
-                //     DistanceToLineSegment(circlePos, { 200, 0 }, { 200, 200 });
-                // }
                 if (DistanceToLineSegment(circlePos, corners[i], corners[(i + 1) % 4]) < radius * radius)
                 {
                     intersecting = true;
@@ -306,25 +287,10 @@ void PhysicsHandler::PhysicsInteraction(PhysicsComponent* entity1, PhysicsCompon
             Vector2 corner1 = collisionBoxCorners[bestIntersectionCorner];
             Vector2 corner2 = collisionBoxCorners[(bestIntersectionCorner + 1) % 4];
             Vector2 bounceWall = Vector2Normalize(Vector2Subtract(corner2, corner1));
-            // std::cout << bounceWall.x << " " << bounceWall.y << std::endl;
             Bounce(circleEntity, { -bounceWall.y, bounceWall.x });
             float lineLengthSqr = Vector2DistanceSqr(corner2, corner1);
             float t = Vector2DotProduct(Vector2Subtract(circlePos, corner1), Vector2Subtract(corner2, corner1)) / lineLengthSqr;
             circleEntity->position = Vector2Add(corner1, Vector2Scale(Vector2Subtract(corner2, corner1), t));
         }
-        // bool interesctingVert = circleVertOffset < radius + width / 2;
-        // bool interesctingHoriz = circleVertOffset < radius + height / 2;
-        // bool interesecting = interesctingVert && interesctingHoriz;
-
-        // if (circleVertOffset < vertIntersectionDist || circleHorizOffset < horizIntersectionDist)
-        // {
-        //     if (circleVertOffset < width / 2 && circleVertOffset < height / 2)
-        //     {
-        //         circlePos = Vector2Subtract(circlePos, circleEntity->velocity);
-        //         circleVertOffset = abs(circlePos.y - (vertWallSlope * circlePos.x + vertWallOffset)) / sqrt(pow(vertWallOffset, 2) + 1);
-        //         circleHorizOffset = abs(circlePos.y - (horizWallSlope * circlePos.x + horizWallOffset)) / sqrt(pow(horizWallOffset, 2) + 1);
-        //     }
-            
-        // }
     }
 }
