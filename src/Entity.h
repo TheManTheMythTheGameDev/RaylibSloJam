@@ -23,6 +23,7 @@ public:
         pos = _pos;
         rotation = _rotation;
         tag.set(tagIndex);
+        ID = entityCounter++;
     }
     template<typename... Ts>
     Entity(Vector2 _pos = Vector2{ 0.0f, 0.0f }, float _rotation = 0.0f, int tagIndex = 0, Ts*... _components)
@@ -31,6 +32,7 @@ public:
         rotation = _rotation;
         tag.set(tagIndex);
         int ints[] = { AddComponentInternal(_components)... };
+        ID = entityCounter++;
     }
     void Unload();
 
@@ -64,8 +66,15 @@ public:
 
     Vector2 pos;
     float rotation;
+
+    // There's no way to know for sure whether two entities are the same unless we implement an ID system
+    bool operator==(const Entity& other)
+    {
+        return (ID == other.ID);
+    }
 private:
     std::unordered_map<int, Component*> components;
+    unsigned int ID;
 
     // Add an already-made component
     template<typename T>
@@ -76,4 +85,6 @@ private:
         comp->OnAdd(*this);
         return ID;
     }
+
+    static unsigned int entityCounter;
 };

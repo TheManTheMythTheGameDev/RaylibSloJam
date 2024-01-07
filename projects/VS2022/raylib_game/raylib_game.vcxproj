@@ -356,6 +356,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\src\CollisionListenComponent.cpp" />
     <ClCompile Include="..\..\..\src\ControllerComponent.cpp" />
+    <ClCompile Include="..\..\..\src\DestructibleWallComponent.cpp" />
     <ClCompile Include="..\..\..\src\Entity.cpp" />
     <ClCompile Include="..\..\..\src\GoalComponent.cpp" />
     <ClCompile Include="..\..\..\src\GraphicsComponent.cpp" />
@@ -369,6 +370,7 @@
     <ClInclude Include="..\..\..\src\CollisionListenComponent.h" />
     <ClInclude Include="..\..\..\src\Component.h" />
     <ClInclude Include="..\..\..\src\ControllerComponent.h" />
+    <ClInclude Include="..\..\..\src\DestructibleWallComponent.h" />
     <ClInclude Include="..\..\..\src\Entity.h" />
     <ClInclude Include="..\..\..\src\GoalComponent.h" />
     <ClInclude Include="..\..\..\src\GraphicsComponent.h" />

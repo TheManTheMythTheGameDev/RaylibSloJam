@@ -1,6 +1,7 @@
 #include "Entity.h"
 
 int componentCounter;
+unsigned int Entity::entityCounter = 0;
 
 void Entity::Unload()
 {

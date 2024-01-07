@@ -16,7 +16,13 @@ void Scene::Update()
     }
     physicsHandler.DebugDraw();
 
-    // Add deferred entities LAST
+    // Add & delete deferred entities LAST
+    for (Entity* ent : entitiesToDelete)
+    {
+        entities.erase(std::remove(entities.begin(), entities.end(), *ent));
+    }
+    entitiesToDelete.clear();
+
     entities.insert(entities.end(), entitiesToAdd.begin(), entitiesToAdd.end());
     entitiesToAdd.clear();
 }
@@ -28,4 +34,9 @@ void Scene::AddEntity(Entity newEntity) {
 void Scene::DeferAddEntity(Entity newEntity)
 {
     entitiesToAdd.push_back(newEntity);
+}
+
+void Scene::DeferDeleteEntity(Entity& entity)
+{
+    entitiesToDelete.push_back(&entity);
 }
