@@ -95,7 +95,7 @@ void PhysicsHandler::Step() {
 bool PhysicsHandler::pointInBox(Vector2 pointPos, Vector2 rectPos, float width, float height, float rotation)
 {
     Vector2 rectToPoint = Vector2Subtract(pointPos, rectPos);
-    float currentRotation = atanf(rectToPoint.y / rectToPoint.x) - rotation;
+    float currentRotation = atan2f(rectToPoint.y, rectToPoint.x) - rotation;
     if (rectToPoint.y < 0)
     {
         currentRotation += PI;
@@ -211,7 +211,7 @@ void PhysicsHandler::PhysicsInteraction(PhysicsComponent* entity1, PhysicsCompon
         }
         float radius = circleEntity->GetShape().shapeData.circleRadius;
         float width = rectEntity->GetShape().shapeData.rectangleData.width;
-        float height = rectEntity->GetShape().shapeData.rectangleData.width;
+        float height = rectEntity->GetShape().shapeData.rectangleData.height;
         float rectRotation = rectEntity->rotation;
         Vector2 circlePos = circleEntity->position;
         Vector2 rectPos = rectEntity->position;
