@@ -185,6 +185,10 @@ void PhysicsHandler::DebugDraw()
 
 void PhysicsHandler::PhysicsInteraction(PhysicsComponent* entity1, PhysicsComponent* entity2)
 {
+    if (((entity1->collisionBlacklist & entity2->holdingEntity->tag).any()) || ((entity2->collisionBlacklist & entity1->holdingEntity->tag).any()))
+    {
+        return;
+    }
     if (entity1->GetShape().shapeType == Shape::ShapeType::Circle && entity2->GetShape().shapeType == Shape::ShapeType::Circle)
     {
         if (entity1->GetShape().shapeData.circleRadius + entity2->GetShape().shapeData.circleRadius > Vector2Distance(entity1->position, entity2->position))

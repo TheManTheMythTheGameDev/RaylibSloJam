@@ -17,8 +17,9 @@ public:
     Entity* holdingEntity;
     std::vector<Entity*> previousCollided;
     std::vector<Entity*> currentCollided;
+    std::bitset<8> collisionBlacklist;
 
-    PhysicsComponent(class PhysicsHandler& physicsHandler_, Shape shape_, bool mobile_ = false, float mass_ = 1.0f, Vector2 velocity_ = Vector2{ 0.0f, 0.0f }, Vector2 acceleration_ = Vector2{ 0.0f, 0.0f });
+    PhysicsComponent(class PhysicsHandler& physicsHandler_, Shape shape_, bool mobile_ = false, int blackList = -1, float mass_ = 1.0f, Vector2 velocity_ = Vector2{ 0.0f, 0.0f }, Vector2 acceleration_ = Vector2{ 0.0f, 0.0f });
     ~PhysicsComponent();
     void OnAdd(Entity& parentEntity);
     void Update(Entity& parentEntity);

@@ -5,7 +5,7 @@
 class FragileComponent : public CollisionListenComponent
 {
 public:
-    FragileComponent(Scene* currentScene_) : CollisionListenComponent(0)
+    FragileComponent(Scene* currentScene_, int listeningTag_ = 0) : CollisionListenComponent(listeningTag_)
     {
         currentScene = currentScene_;
     }
