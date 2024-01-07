@@ -29,6 +29,7 @@
 #include "GoalComponent.h"
 #include "PhysicsHandler.h"
 #include "ControllerComponent.h"
+#include "DestructibleWallComponent.h"
 
 //----------------------------------------------------------------------------------
 // Defines and Macros
@@ -93,7 +94,11 @@ int main(void)
     target = LoadRenderTexture(screenWidth, screenHeight);
     SetTextureFilter(target.texture, TEXTURE_FILTER_BILINEAR);
 
-    defaultTexture = LoadTexture("src/vecteezy_white-circle-png_21115771_475.png");
+    constexpr int imageSize = 500;
+    Image circleImage = GenImageColor(imageSize, imageSize, Color{ 1, 1, 1, 0 });
+    ImageDrawCircle(&circleImage, imageSize / 2, imageSize / 2, imageSize / 2, WHITE);
+    defaultTexture = /*LoadTexture("src/vecteezy_white-circle-png_21115771_475.png")*/ LoadTextureFromImage(circleImage);
+    UnloadImage(circleImage);
     static Texture2D wallTexture = LoadTexture("src/Solid_white_bordered.png");
     static Texture2D endScreenTexture = LoadTexture("src/EndScreen.png");
 
@@ -103,11 +108,13 @@ int main(void)
     Entity exampleGoal = Entity(Vector2{ 1180.0f, 620.0f }, 0.0f, 0, new GraphicsComponent(defaultTexture, 130.0f, 130.0f), new PhysicsComponent(sampleScene.physicsHandler, Shape(Shape::ShapeType::Circle, Shape::ShapeData{ 100.0f })), new GoalComponent(1, playerController, &sampleScene, endScreenTexture));
     Shape::ShapeData rectangleDimensions = Shape::ShapeData{ 0.0f };
     rectangleDimensions.rectangleData = Shape::RectangleDimensions{ 30.0f, 400.0f };
-    Entity exampleWall = Entity(Vector2{400.0f, 200.0f}, PI / 4, 0,  new GraphicsComponent(wallTexture, 15.0f, 200.0f, 45.0f), new PhysicsComponent(sampleScene.physicsHandler, Shape(Shape::ShapeType::Rectangle, rectangleDimensions)));
+    Entity exampleWall = Entity(Vector2{400.0f, 200.0f}, PI / 4, 0,  new GraphicsComponent(wallTexture, 15.0f, 200.0f), new PhysicsComponent(sampleScene.physicsHandler, Shape(Shape::ShapeType::Rectangle, rectangleDimensions)));
+    Entity exampleDestructibleWall = Entity(Vector2{ 200.0f, 500.0f }, 0.0f, 0, new DestructibleWallComponent(sampleScene, defaultTexture, Vector2{ 100.0f, 150.0f }), new GraphicsComponent(wallTexture, 100.0f, 150.0f));
     sampleScene.AddEntity(examplePlayer);
     sampleScene.AddEntity(exampleGolfBall);
     sampleScene.AddEntity(exampleWall);
     sampleScene.AddEntity(exampleGoal);
+    sampleScene.AddEntity(exampleDestructibleWall);
 
 #if defined(PLATFORM_WEB)
     emscripten_set_main_loop(UpdateDrawFrame, 60, 1);

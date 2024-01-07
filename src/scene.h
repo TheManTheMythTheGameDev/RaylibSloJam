@@ -15,9 +15,12 @@ public:
     void AddEntity(Entity newEntity);
     // Use this function if an entity is being added in the middle of a frame -- i.e. in a component's update function
     void DeferAddEntity(Entity newEntity);
+    // Theoretically entity deletion doesn't need to be deferred but this is just easier to think about
+    void DeferDeleteEntity(Entity& entity);
 
     PhysicsHandler physicsHandler;
 private:
     std::vector<Entity> entities;
     std::vector<Entity> entitiesToAdd;
+    std::vector<Entity*> entitiesToDelete;
 };

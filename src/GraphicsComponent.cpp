@@ -8,5 +8,5 @@ void GraphicsComponent::Update(Entity& parentEntity)
         Rectangle{0, 0, float(texture.width), float(texture.height)},
         Rectangle{parentEntity.pos.x, parentEntity.pos.y, width * 2, height * 2},
         Vector2{width, height},
-        rotation, RED);
+        parentEntity.rotation * RAD2DEG, RED);
 }
