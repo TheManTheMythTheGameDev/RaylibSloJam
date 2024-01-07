@@ -7,7 +7,7 @@
 class GoalComponent : public CollisionListenComponent
 {
 public:
-    GoalComponent(int listeningTag_, ControllerComponent* player_, Scene* currentScene_, Texture2D endScreen_) : CollisionListenComponent(listeningTag_)
+    GoalComponent(ControllerComponent* player_, Scene* currentScene_, Texture2D endScreen_) : CollisionListenComponent(1)
     {
         player = player_;
         currentScene = currentScene_;

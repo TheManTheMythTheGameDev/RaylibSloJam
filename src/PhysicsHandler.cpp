@@ -96,7 +96,7 @@ bool PhysicsHandler::pointInBox(Vector2 pointPos, Vector2 rectPos, float width, 
 {
     Vector2 rectToPoint = Vector2Subtract(pointPos, rectPos);
     float currentRotation = atan2f(-rectToPoint.y, rectToPoint.x) - rotation;
-    std::cout << currentRotation << std::endl;
+    // std::cout << currentRotation << std::endl;
     rectToPoint = Vector2Scale({ cosf(currentRotation), sinf(currentRotation) }, Vector2Length(rectToPoint));
     return rectToPoint.x < rectPos.x + width / 2 && rectToPoint.x > rectPos.x - width / 2 && rectToPoint.y < rectPos.y + height / 2 && rectToPoint.y > rectPos.y - height / 2;
 }

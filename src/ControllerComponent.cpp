@@ -32,6 +32,17 @@ void ControllerComponent::Update(Entity& parentEntity)
             thrustAccumulator -= thrustAmount;
         }
 
+        if (IsKeyPressed(KEY_SPACE))
+        {
+            float bulletDist = physicsComp->GetShape().shapeData.circleRadius + bulletRadius + 0.1f;
+            float radianAngle = angle * PI / 180;
+            Vector2 bulletPos = { physicsComp->position.x + bulletDist * cosf(radianAngle), physicsComp->position.y + bulletDist * sinf(radianAngle) };
+            std::cout << bulletSpeed << std::endl;
+            Vector2 bulletVelocity = { bulletSpeed * cosf(radianAngle), bulletSpeed * sinf(radianAngle) };
+            Entity bullet = Entity(bulletPos, radianAngle, 0, new GraphicsComponent(bulletTexture, bulletRadius, bulletRadius), new PhysicsComponent(scene->physicsHandler, Shape(Shape::ShapeType::Circle, Shape::ShapeData{ bulletRadius }), true, 1.0f, bulletVelocity), new FragileComponent(scene));
+            scene->AddEntity(bullet);
+        }
+
         Vector2 thrustVector = Vector2Scale(Vector2{ cosf(angle * DEG2RAD), sinf(angle * DEG2RAD) }, thrustAccumulator);
         physicsComp->velocity = Vector2Add(physicsComp->velocity, thrustVector);
 

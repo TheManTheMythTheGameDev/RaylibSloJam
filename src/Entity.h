@@ -22,6 +22,7 @@ public:
     {
         pos = _pos;
         rotation = _rotation;
+        tag.set(0);
         tag.set(tagIndex);
         ID = entityCounter++;
     }
