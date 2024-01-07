@@ -38,8 +38,8 @@ void ControllerComponent::Update(Entity& parentEntity)
         {
             float bulletDist = physicsComp->GetShape().shapeData.circleRadius + bulletRadius + 0.1f;
             float radianAngle = angle * DEG2RAD;
+            physicsComp->velocity = Vector2Subtract(physicsComp->velocity, { kickbackForce * cosf(radianAngle), kickbackForce * sinf(radianAngle) });
             Vector2 bulletPos = { physicsComp->position.x + bulletDist * cosf(radianAngle), physicsComp->position.y + bulletDist * sinf(radianAngle) };
-            std::cout << bulletSpeed << std::endl;
             Vector2 bulletVelocity = { bulletSpeed * cosf(radianAngle), bulletSpeed * sinf(radianAngle) };
             Entity* bullet = new Entity(bulletPos, radianAngle, 0, new GraphicsComponent(bulletTexture, bulletRadius, bulletRadius), new PhysicsComponent(scene->physicsHandler, Shape(Shape::ShapeType::Circle, Shape::ShapeData{ bulletRadius }), true, 1.0f, bulletVelocity), new FragileComponent(scene));
             scene->DeferAddEntity(bullet);
