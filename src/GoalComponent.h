@@ -13,7 +13,7 @@ public:
         currentScene = currentScene_;
         endScreen = endScreen_;
     }
-    void OnTriggerCollision(Entity* otherEntity);
+    void OnTriggerCollision(Entity* otherEntity, Entity* thisEntity);
     ~GoalComponent()
     {
     }

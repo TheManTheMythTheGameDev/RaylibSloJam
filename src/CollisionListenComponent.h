@@ -10,7 +10,7 @@ public:
         listeningTag = listeningTag_;
     }
     virtual void Update(Entity& parentEntity);
-    virtual void OnTriggerCollision(Entity* otherEntity) = 0;
+    virtual void OnTriggerCollision(Entity* otherEntity, Entity* thisEntity) = 0;
     ~CollisionListenComponent()
     {
     }

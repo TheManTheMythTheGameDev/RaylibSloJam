@@ -4,6 +4,8 @@
 #include "raylib.h"
 #include <math.h>
 #include "raymath.h"
+#include "GraphicsComponent.h"
+#include "FragileComponent.h"
 
 void ControllerComponent::Update(Entity& parentEntity)
 {
@@ -35,12 +37,12 @@ void ControllerComponent::Update(Entity& parentEntity)
         if (IsKeyPressed(KEY_SPACE))
         {
             float bulletDist = physicsComp->GetShape().shapeData.circleRadius + bulletRadius + 0.1f;
-            float radianAngle = angle * PI / 180;
+            float radianAngle = angle * DEG2RAD;
             Vector2 bulletPos = { physicsComp->position.x + bulletDist * cosf(radianAngle), physicsComp->position.y + bulletDist * sinf(radianAngle) };
             std::cout << bulletSpeed << std::endl;
             Vector2 bulletVelocity = { bulletSpeed * cosf(radianAngle), bulletSpeed * sinf(radianAngle) };
-            Entity bullet = Entity(bulletPos, radianAngle, 0, new GraphicsComponent(bulletTexture, bulletRadius, bulletRadius), new PhysicsComponent(scene->physicsHandler, Shape(Shape::ShapeType::Circle, Shape::ShapeData{ bulletRadius }), true, 1.0f, bulletVelocity), new FragileComponent(scene));
-            scene->AddEntity(bullet);
+            Entity* bullet = new Entity(bulletPos, radianAngle, 0, new GraphicsComponent(bulletTexture, bulletRadius, bulletRadius), new PhysicsComponent(scene->physicsHandler, Shape(Shape::ShapeType::Circle, Shape::ShapeData{ bulletRadius }), true, 1.0f, bulletVelocity), new FragileComponent(scene));
+            scene->DeferAddEntity(bullet);
         }
 
         Vector2 thrustVector = Vector2Scale(Vector2{ cosf(angle * DEG2RAD), sinf(angle * DEG2RAD) }, thrustAccumulator);

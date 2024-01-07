@@ -291,6 +291,9 @@ void PhysicsHandler::PhysicsInteraction(PhysicsComponent* entity1, PhysicsCompon
             float lineLengthSqr = Vector2DistanceSqr(corner2, corner1);
             float t = Vector2DotProduct(Vector2Subtract(circlePos, corner1), Vector2Subtract(corner2, corner1)) / lineLengthSqr;
             circleEntity->position = Vector2Add(corner1, Vector2Scale(Vector2Subtract(corner2, corner1), t));
+
+            entity1->currentCollided.push_back(entity2->holdingEntity);
+            entity2->currentCollided.push_back(entity1->holdingEntity);
         }
     }
 }

@@ -13,6 +13,7 @@ PhysicsComponent::PhysicsComponent(PhysicsHandler& physicsHandler_, Shape shape_
 
 PhysicsComponent::~PhysicsComponent() 
 {
+    physicsHandler->RemoveEntity(this);
 }
 
 void PhysicsComponent::OnAdd(Entity& parentEntity)

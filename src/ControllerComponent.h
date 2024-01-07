@@ -1,7 +1,5 @@
 #pragma once
 #include "Scene.h"
-#include "GraphicsComponent.h"
-#include "FragileComponent.h"
 
 class ControllerComponent : public Component
 {

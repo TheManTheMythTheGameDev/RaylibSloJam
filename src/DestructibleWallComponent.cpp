@@ -22,13 +22,13 @@ void DestructibleWallComponent::Update(Entity& parentEntity)
         for (int i = 0; i < numCircles; i++)
         {
             Circle circle = circles[i];
-            Entity ent = Entity(circle.pos, 0.0f, 0, new GraphicsComponent(circleTex, circle.radius, circle.radius));
+            Entity* ent = new Entity(circle.pos, 0.0f, 0, new GraphicsComponent(circleTex, circle.radius, circle.radius));
             scene.DeferAddEntity(ent);
         }
 
         delete[] circles;
 
-        scene.DeferDeleteEntity(parentEntity);
+        scene.DeferDeleteEntity(&parentEntity);
     }
 }
 

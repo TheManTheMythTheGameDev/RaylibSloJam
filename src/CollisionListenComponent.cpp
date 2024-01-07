@@ -6,7 +6,7 @@ void CollisionListenComponent::Update(Entity& parentEntity)
     {
         if (collision->tag.test(listeningTag))
         {
-            OnTriggerCollision(collision);
+            OnTriggerCollision(collision, &parentEntity);
         }
     }
 }
