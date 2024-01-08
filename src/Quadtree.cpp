@@ -104,7 +104,10 @@ void Quadtree::Insert(PhysicsComponent* newEntity)
             }
             else
             {
-                branches[recIndex]->Insert(newEntity);
+                if (recIndex >= 0 && recIndex <= 3)
+                {
+                    branches[recIndex]->Insert(newEntity);
+                }
             }
         }
     }
