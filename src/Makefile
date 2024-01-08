@@ -94,7 +94,7 @@ endif
 
 # Define default C compiler: CC
 #------------------------------------------------------------------------------------------------
-CC = gcc
+CC = g++
 
 ifeq ($(PLATFORM),PLATFORM_DESKTOP)
     ifeq ($(PLATFORM_OS),OSX)
@@ -110,7 +110,7 @@ ifeq ($(PLATFORM),PLATFORM_WEB)
     # HTML5 emscripten compiler
     # WARNING: To compile to HTML5, code must be redesigned
     # to use emscripten.h and emscripten_set_main_loop()
-    CC = emcc
+    CC = em++
 endif
 ifeq ($(PLATFORM),PLATFORM_DRM)
     ifeq ($(USE_RPI_CROSS_COMPILER),TRUE)
@@ -298,7 +298,19 @@ endif
 
 # Define source code files required
 #------------------------------------------------------------------------------------------------
-PROJECT_SOURCE_FILES ?= raylib_game.c
+PROJECT_SOURCE_FILES ?= \
+    raylib_game.cpp \
+    CollisionListenComponent.cpp \
+    ControllerComponent.cpp \
+    DestructibleWallComponent.cpp \
+    Entity.cpp \
+    FragileComponent.cpp \
+    GoalComponent.cpp \
+    GraphicsComponent.cpp \
+    PhysicsComponent.cpp \
+    PhysicsHandler.cpp \
+    Quadtree.cpp \
+    Scene.cpp
 
 # Define all object files from source files
 OBJS = $(patsubst %.c, %.o, $(PROJECT_SOURCE_FILES))

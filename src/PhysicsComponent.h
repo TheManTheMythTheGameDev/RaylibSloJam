@@ -3,6 +3,7 @@
 #include "raymath.h"
 #include "Shape.h"
 #include <vector>
+#include <bitset>
 
 class PhysicsComponent : public Component
 {
