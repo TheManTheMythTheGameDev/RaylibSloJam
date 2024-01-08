@@ -159,8 +159,6 @@ void PhysicsHandler::ResolveCircleCollision(PhysicsComponent* entity1, PhysicsCo
         entity1->position = Vector2Subtract(entity1->position, Vector2Scale(normalUnitVector, overlapDist));
         entity2->position = Vector2Subtract(entity2->position, Vector2Scale(negativeNormalVector, overlapDist));
     }
-    entity1->currentCollided.push_back(entity2->holdingEntity);
-    entity2->currentCollided.push_back(entity1->holdingEntity);
 }
 
 
@@ -185,11 +183,21 @@ void PhysicsHandler::DebugDraw()
 
 void PhysicsHandler::PhysicsInteraction(PhysicsComponent* entity1, PhysicsComponent* entity2)
 {
+    bool resolvePhysics = true;
+    if (((entity1->collisionBlacklist & entity2->holdingEntity->tag).any()) || ((entity2->collisionBlacklist & entity1->holdingEntity->tag).any()))
+    {
+        resolvePhysics = false;
+    }
     if (entity1->GetShape().shapeType == Shape::ShapeType::Circle && entity2->GetShape().shapeType == Shape::ShapeType::Circle)
     {
         if (entity1->GetShape().shapeData.circleRadius + entity2->GetShape().shapeData.circleRadius > Vector2Distance(entity1->position, entity2->position))
         {
-            ResolveCircleCollision(entity1, entity2);
+            if (resolvePhysics)
+            {
+                ResolveCircleCollision(entity1, entity2);
+            }
+            entity1->currentCollided.push_back(entity2->holdingEntity);
+            entity2->currentCollided.push_back(entity1->holdingEntity);
         }
     }
     else
@@ -236,7 +244,7 @@ void PhysicsHandler::PhysicsInteraction(PhysicsComponent* entity1, PhysicsCompon
                 }
             }
         }
-        if (intersecting)
+        if (intersecting && resolvePhysics)
         {
             std::cout << circleInBox << std::endl;
             Vector2 collisionBoxCorners[4];
@@ -291,7 +299,9 @@ void PhysicsHandler::PhysicsInteraction(PhysicsComponent* entity1, PhysicsCompon
             float lineLengthSqr = Vector2DistanceSqr(corner2, corner1);
             float t = Vector2DotProduct(Vector2Subtract(circlePos, corner1), Vector2Subtract(corner2, corner1)) / lineLengthSqr;
             circleEntity->position = Vector2Add(corner1, Vector2Scale(Vector2Subtract(corner2, corner1), t));
-
+        }
+        if (intersecting)
+        {
             entity1->currentCollided.push_back(entity2->holdingEntity);
             entity2->currentCollided.push_back(entity1->holdingEntity);
         }

@@ -23,6 +23,7 @@ public:
 
     static constexpr float thrustMultiplier = 200.0f;
     static constexpr float rotationMultiplier = 180.0f;
+    static constexpr float kickbackForce = 10.0f;
     static constexpr float bulletRadius = 5.0f;
     static constexpr float bulletSpeed = 300.0f;
 private:

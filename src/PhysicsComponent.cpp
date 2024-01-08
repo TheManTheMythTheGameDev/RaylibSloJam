@@ -1,8 +1,12 @@
 #include "PhysicsComponent.h"
 #include "PhysicsHandler.h"
 
-PhysicsComponent::PhysicsComponent(PhysicsHandler& physicsHandler_, Shape shape_, bool mobile_, float mass_, Vector2 velocity_, Vector2 acceleration_) 
+PhysicsComponent::PhysicsComponent(PhysicsHandler& physicsHandler_, Shape shape_, bool mobile_, int blacklist, float mass_, Vector2 velocity_, Vector2 acceleration_) 
 {
+    if (blacklist > -1 && blacklist < 8)
+    {
+        collisionBlacklist.set(blacklist);
+    }
     mobile = mobile_;
     shape = shape_;
     mass = mass_;

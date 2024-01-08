@@ -31,6 +31,7 @@ public:
     {
         pos = _pos;
         rotation = _rotation;
+        tag.set(0);
         tag.set(tagIndex);
         int ints[] = { AddComponentInternal(_components)... };
         ID = entityCounter++;

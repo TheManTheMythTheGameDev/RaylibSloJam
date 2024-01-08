@@ -103,8 +103,8 @@ int main(void)
     static Texture2D endScreenTexture = LoadTexture("src/EndScreen.png");
 
     ControllerComponent* playerController =  new ControllerComponent(defaultTexture, &sampleScene);
-    Entity* examplePlayer = new Entity(Vector2{ 100.0f, 100.0f }, 0.0f, 0, new GraphicsComponent(defaultTexture, 42.0f, 42.0f), new PhysicsComponent(sampleScene.physicsHandler, Shape(Shape::ShapeType::Circle, Shape::ShapeData{ 30.0f }), true), playerController);
-    Entity* exampleGolfBall = new Entity(Vector2{ 500.0f, 300.0f }, 0.0f, 1, new GraphicsComponent(defaultTexture, 42.0f, 42.0f), new PhysicsComponent(sampleScene.physicsHandler, Shape(Shape::ShapeType::Circle, Shape::ShapeData{ 30.0f }), true));
+    Entity* examplePlayer = new Entity(Vector2{ 100.0f, 100.0f }, 0.0f, 0, new GraphicsComponent(defaultTexture, 42.0f, 42.0f), new PhysicsComponent(sampleScene.physicsHandler, Shape(Shape::ShapeType::Circle, Shape::ShapeData{ 30.0f }), true, 1, 15.0f), playerController);
+    Entity* exampleGolfBall = new Entity(Vector2{ 500.0f, 300.0f }, 0.0f, 1, new GraphicsComponent(defaultTexture, 42.0f, 42.0f), new PhysicsComponent(sampleScene.physicsHandler, Shape(Shape::ShapeType::Circle, Shape::ShapeData{ 30.0f }), true, -1, 10.0f));
     Entity* exampleGoal = new Entity(Vector2{ 1180.0f, 620.0f }, 0.0f, 0, new GraphicsComponent(defaultTexture, 130.0f, 130.0f), new PhysicsComponent(sampleScene.physicsHandler, Shape(Shape::ShapeType::Circle, Shape::ShapeData{ 100.0f })), new GoalComponent(playerController, &sampleScene, endScreenTexture));
     Shape::ShapeData rectangleDimensions = Shape::ShapeData{ 0.0f };
     rectangleDimensions.rectangleData = Shape::RectangleDimensions{ 30.0f, 400.0f };

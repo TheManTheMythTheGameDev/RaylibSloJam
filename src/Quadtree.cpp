@@ -31,7 +31,7 @@ void Quadtree::Split()
 
 void Quadtree::Insert(PhysicsComponent* newEntity)
 {
-    if ((!alreadySplit && entities.size() < capacity) || level >= maxLevel)
+     if ((!alreadySplit && entities.size() < capacity) || level >= maxLevel)
     {
         entities.push_back(newEntity);
         quadFinder[newEntity] = this;
