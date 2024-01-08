@@ -17,7 +17,7 @@ jobs:
       PROJECT_NAME: ${{ github.event.repository.name }}
       PROJECT_BUILD_PATH: ${{ github.event.repository.name }}\\src
       PROJECT_RELEASE_PATH: ${{ github.event.repository.name }}_dev_wasm
-      PROJECT_SOURCES: raylib_game.c
+      PROJECT_SOURCES: raylib_game.cpp
       BUILD_WEB_SHELL: minshell.html
       
     steps:
@@ -33,9 +33,9 @@ jobs:
         path: raylib
   
     - name: Setup emsdk
-      uses: mymindstorm/setup-emsdk@v12
+      uses: mymindstorm/setup-emsdk@v11
       with:
-        version: 3.1.30
+        version: 3.1.26
         actions-cache-folder: 'emsdk-cache'
         
     - name: Setup Release Paths
@@ -58,7 +58,7 @@ jobs:
     - name: Build Product
       run: |
         cd ${{ env.PROJECT_NAME }}/src
-        make PLATFORM=PLATFORM_WEB BUILD_MODE=RELEASE EMSDK_PATH="D:/a/${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}/emsdk-cache/emsdk-main" PROJECT_SOURCE_FILES=${{ env.PROJECT_SOURCES }} PROJECT_BUILD_PATH=. RAYLIB_PATH=../../raylib -B
+        make PLATFORM=PLATFORM_WEB BUILD_MODE=RELEASE EMSDK_PATH="D:/a/${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}/emsdk-cache/emsdk-main" PROJECT_BUILD_PATH=. RAYLIB_PATH=../../raylib -B
   
     - name: Generate Artifacts
       run: |
